@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Perimeter Link · Mobile preview</title>
+<link rel="icon" type="image/png" href="../icons/icon-192.png" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: #E9EFFC;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 18px; padding: 20px; overflow: hidden;
+  }
+  .top { display: flex; align-items: center; gap: 12px; color: #0B1B3F; }
+  .top img { width: 36px; height: 36px; border-radius: 9px; }
+  .top b { font-size: 18px; }
+  .top span { color: #475569; font-size: 14px; }
+  .stage { position: relative; width: 414px; height: 868px; flex: none; transform-origin: top center; }
+  .phone {
+    position: absolute; inset: 0; background: #0B1B3F; border-radius: 56px; padding: 12px;
+    box-shadow: 0 30px 60px rgba(11, 27, 63, .25), inset 0 0 0 2px #1E3A8A;
+  }
+  .screen { position: relative; width: 390px; height: 844px; border-radius: 44px; overflow: hidden; background: #fff; }
+  .island { position: absolute; top: 11px; left: 50%; transform: translateX(-50%); width: 120px; height: 34px; border-radius: 20px; background: #0B1B3F; z-index: 2; pointer-events: none; }
+  .status { height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 6px 30px 0 34px; font-weight: 600; font-size: 15px; color: #0B1B3F; background: #fff; }
+  .status i { font-style: normal; font-size: 12px; letter-spacing: 1px; }
+  iframe { width: 390px; height: 794px; border: 0; display: block; }
+  .links { display: flex; gap: 10px; }
+  .links a { font-size: 14px; font-weight: 600; color: #1D4ED8; text-decoration: none; padding: 9px 14px; border-radius: 10px; background: #fff; border: 1px solid #C7D7F7; }
+  .links a:hover { border-color: #1D4ED8; }
+  @media (max-width: 500px) {
+    /* Already on a phone: just show the app */
+    body { padding: 0; background: #fff; }
+    .top, .links, .island { display: none; }
+    .stage { width: 100vw; height: 100vh; transform: none !important; }
+    .phone { padding: 0; border-radius: 0; background: none; box-shadow: none; }
+    .status { display: none; }
+    .screen, iframe { width: 100vw; height: 100vh; border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+  <div class="top"><img src="../icons/icon-192.png" alt="" /><div><b>Perimeter Link</b><br /><span>Mobile preview</span></div></div>
+  <div class="stage" id="stage">
+    <div class="phone">
+      <div class="screen">
+        <div class="island"></div>
+        <div class="status"><span>9:41</span><i>●●● ▮</i></div>
+        <iframe src="../?v=12" title="Perimeter Link app at phone size"></iframe>
+      </div>
+    </div>
+  </div>
+  <div class="links">
+    <a href="../?v=12">Open full desktop version</a>
+  </div>
+<script>
+  // Shrink the phone to fit shorter laptop screens
+  function fit() {
+    var stage = document.getElementById('stage');
+    if (window.innerWidth <= 500) { stage.style.transform = ''; stage.style.marginBottom = ''; return; }
+    var room = window.innerHeight - 150;
+    var s = Math.min(1, room / 868);
+    stage.style.transform = 'scale(' + s + ')';
+    stage.style.marginBottom = (-(868 * (1 - s))) + 'px';
+  }
+  window.addEventListener('resize', fit);
+  fit();
+</script>
+</body>
+</html>

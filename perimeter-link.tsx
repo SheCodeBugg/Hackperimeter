@@ -1086,9 +1086,9 @@ export default function App() {
           {/* Brand Logo */}
           <div
             onClick={() => setActiveTab('feed')}
-            className="flex items-center gap-2.5 cursor-pointer group shrink-0"
+            className="flex items-center gap-2 sm:gap-2.5 cursor-pointer group shrink-0"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0039A6] to-[#0077CC] flex items-center justify-center text-white shadow-md shadow-blue-900/20 group-hover:scale-105 transition-transform">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#0039A6] to-[#0077CC] flex items-center justify-center text-white shadow-md shadow-blue-900/20 group-hover:scale-105 transition-transform">
               <div className="relative flex items-center justify-center">
                 <span className="text-lg">🐾</span>
                 <LinkIcon className="w-3.5 h-3.5 text-amber-300 absolute -bottom-1 -right-1.5 bg-[#0039A6] rounded-full p-0.5" />
@@ -1096,7 +1096,7 @@ export default function App() {
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-lg sm:text-xl tracking-tight text-[#0039A6]">
+                <span className="font-extrabold text-base sm:text-xl tracking-tight text-[#0039A6]">
                   Perimeter<span className="text-[#0077CC]">Link</span>
                 </span>
                 <span className="hidden lg:inline-block text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-[#0039A6] px-2 py-0.5 rounded-full border border-blue-200">
@@ -1132,7 +1132,7 @@ export default function App() {
           </div>
 
           {/* Right Controls: Campus Filter + Panther Points Pill + Create Button */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3 min-w-0">
             {/* Campus Selector Dropdown */}
             <div className="relative flex items-center">
               <MapPin className="w-3.5 h-3.5 text-[#0039A6] absolute left-2.5 pointer-events-none" />
@@ -1140,7 +1140,7 @@ export default function App() {
                 aria-label="Filter by Perimeter Campus"
                 value={selectedCampus}
                 onChange={(e) => setSelectedCampus(e.target.value)}
-                className="pl-7 pr-7 py-1.5 sm:py-2 bg-slate-100 hover:bg-slate-200/70 text-slate-800 font-semibold text-xs sm:text-sm rounded-full border border-slate-200 focus:outline-none focus:border-[#0039A6] cursor-pointer appearance-none"
+                className="max-w-[96px] sm:max-w-none truncate pl-7 pr-6 sm:pr-7 py-1.5 sm:py-2 bg-slate-100 hover:bg-slate-200/70 text-slate-800 font-semibold text-xs sm:text-sm rounded-full border border-slate-200 focus:outline-none focus:border-[#0039A6] cursor-pointer appearance-none"
               >
                 {CAMPUSES.map((campus) => (
                   <option key={campus} value={campus}>
@@ -1156,10 +1156,10 @@ export default function App() {
             {/* Panther Points Live Badge */}
             <button
               onClick={() => setIsPointsModalOpen(true)}
-              className="flex items-center gap-2 bg-gradient-to-r from-[#0039A6] to-[#0055D4] hover:from-[#002D85] hover:to-[#0039A6] text-white px-3 py-1.5 sm:py-2 rounded-full shadow-sm transition-all cursor-pointer group"
+              className="shrink-0 flex items-center gap-2 bg-gradient-to-r from-[#0039A6] to-[#0055D4] hover:from-[#002D85] hover:to-[#0039A6] text-white px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full shadow-sm transition-all cursor-pointer group"
               title="View Panther Points & Rewards"
             >
-              <span className="text-sm group-hover:rotate-12 transition-transform">🐾</span>
+              <span className="hidden sm:inline text-sm group-hover:rotate-12 transition-transform">🐾</span>
               <div className="text-left leading-tight">
                 <span className="font-extrabold text-xs sm:text-sm text-amber-300">
                   {user.points} pts
@@ -1176,7 +1176,7 @@ export default function App() {
                 setCreateType(activeTab === 'ask' ? 'ask' : activeTab === 'opportunities' ? 'opp' : 'feed');
                 setIsCreateModalOpen(true);
               }}
-              className="flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-[#002875] font-extrabold text-xs sm:text-sm px-3.5 py-2 rounded-full shadow-sm hover:shadow transition-all cursor-pointer"
+              className="shrink-0 flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-[#002875] font-extrabold text-xs sm:text-sm px-2.5 sm:px-3.5 py-2 rounded-full shadow-sm hover:shadow transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4 stroke-[2.75]" />
               <span className="hidden sm:inline">Create</span>
@@ -1386,7 +1386,7 @@ export default function App() {
         {/* CENTER MAIN STREAM */}
         <main className="lg:col-span-6 space-y-5">
           {/* Tablet / Top Tab Switcher (Visible on < lg screens) */}
-          <div className="lg:hidden bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm grid grid-cols-5 gap-1">
+          <div className="hidden md:grid lg:hidden bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm grid-cols-5 gap-1">
             {[
               { id: 'feed', label: 'Feed', icon: Home },
               { id: 'buddies', label: 'Buddies', icon: Users },
