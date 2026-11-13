@@ -451,6 +451,27 @@ const REWARDS_CATALOG = [
 // HELPER FUNCTIONS
 // ============================================================================
 
+// LinkedIn-style Interests directory for the Panther Hub profile
+const INTEREST_DIRECTORY = [
+  { name: 'Engineering', type: 'Topics', followers: 1840, color: 'bg-blue-600' },
+  { name: 'Tech', type: 'Topics', followers: 2315, color: 'bg-indigo-600' },
+  { name: 'Hackathons', type: 'Topics', followers: 962, color: 'bg-violet-600' },
+  { name: 'Transfer Prep', type: 'Topics', followers: 3104, color: 'bg-sky-600' },
+  { name: 'Innovation', type: 'Topics', followers: 774, color: 'bg-cyan-700' },
+  { name: 'Chemistry', type: 'Topics', followers: 655, color: 'bg-emerald-600' },
+  { name: 'Pre-Med / PA', type: 'Topics', followers: 1420, color: 'bg-rose-600' },
+  { name: 'MESA', type: 'Clubs', followers: 488, color: 'bg-amber-600' },
+  { name: 'Clubs', type: 'Clubs', followers: 1203, color: 'bg-orange-600' },
+  { name: 'Coding Club', type: 'Clubs', followers: 512, color: 'bg-slate-700' },
+  { name: 'SGA & Leadership', type: 'Clubs', followers: 397, color: 'bg-red-700' },
+  { name: 'Honors College', type: 'Clubs', followers: 864, color: 'bg-purple-700' },
+  { name: 'Georgia State University', type: 'Schools', followers: 5120, color: 'bg-[#0039A6]' },
+  { name: 'Perimeter College', type: 'Schools', followers: 4380, color: 'bg-[#0077CC]' },
+  { name: 'Georgia Tech', type: 'Schools', followers: 2210, color: 'bg-yellow-600' },
+  { name: 'Kennesaw State University', type: 'Schools', followers: 1090, color: 'bg-zinc-700' }
+];
+
+
 function getTierInfo(points) {
   if (points >= 800) return { title: 'Panther Legend', next: 1000, color: 'text-amber-500', bg: 'bg-amber-500/10' };
   if (points >= 500) return { title: 'Campus Ambassador', next: 800, color: 'text-[#0077CC]', bg: 'bg-blue-500/10' };
@@ -504,6 +525,8 @@ export default function App() {
   // New Interest addition state
   const [newInterestInput, setNewInterestInput] = useState('');
   const [isAddingInterest, setIsAddingInterest] = useState(false);
+  const [interestTab, setInterestTab] = useState('Topics');
+  const [showAllInterests, setShowAllInterests] = useState(false);
 
   // Comment & Answer Drafts
   const [commentDrafts, setCommentDrafts] = useState({});
@@ -2238,104 +2261,6 @@ export default function App() {
 
                   <p className="text-sm text-slate-600 mt-4">{user.bio}</p>
 
-                  {/* CLICKABLE INTEREST BUBBLES SECTION */}
-                  <div className="mt-5 pt-4 border-t border-slate-100">
-                    <div className="flex items-center justify-between mb-3">
-                      <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                        <Sparkles className="w-4 h-4 text-[#0039A6]" /> Academic & Club Interests (Click to Toggle)
-                      </h3>
-                      {!isAddingInterest ? (
-                        <button
-                          onClick={() => setIsAddingInterest(true)}
-                          className="text-xs font-bold text-[#0039A6] hover:underline flex items-center gap-1 cursor-pointer bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full transition-colors"
-                        >
-                          <Plus className="w-3.5 h-3.5" /> Add Interest
-                        </button>
-                      ) : (
-                        <form onSubmit={handleAddUserInterest} className="flex items-center gap-1.5">
-                          <input
-                            type="text"
-                            value={newInterestInput}
-                            onChange={(e) => setNewInterestInput(e.target.value)}
-                            placeholder="e.g. Robotics, Nursing..."
-                            className="bg-slate-100 border border-slate-300 rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:border-[#0039A6]"
-                            autoFocus
-                          />
-                          <button
-                            type="submit"
-                            className="bg-[#0039A6] text-white text-xs font-bold px-3 py-1 rounded-lg cursor-pointer hover:bg-[#002D85] shadow-xs"
-                          >
-                            Save
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setIsAddingInterest(false)}
-                            className="text-slate-400 hover:text-slate-600 text-xs px-1.5 font-bold"
-                          >
-                            ✕
-                          </button>
-                        </form>
-                      )}
-                    </div>
-
-                    <div className="flex flex-wrap gap-2.5">
-                      {['Engineering', 'Chemistry', 'Tech', 'Innovation', 'Clubs', 'Transfer Prep', 'Hackathons', 'Pre-Med / PA', 'MESA'].map((defaultTag, idx) => {
-                        const isSelected = user.interests.includes(defaultTag);
-                        // Assign pleasant pastel & gradient themes based on index for a gorgeous aesthetic
-                        const gradients = [
-                          'from-blue-600 to-indigo-600 shadow-blue-500/25',
-                          'from-emerald-600 to-teal-600 shadow-emerald-500/25',
-                          'from-amber-500 to-orange-600 shadow-amber-500/25',
-                          'from-purple-600 to-pink-600 shadow-purple-500/25',
-                          'from-cyan-600 to-blue-600 shadow-cyan-500/25',
-                          'from-rose-600 to-red-600 shadow-rose-500/25',
-                          'from-violet-600 to-indigo-700 shadow-violet-500/25',
-                          'from-sky-600 to-blue-700 shadow-sky-500/25',
-                          'from-emerald-700 to-green-600 shadow-emerald-500/25'
-                        ];
-                        const activeGradient = gradients[idx % gradients.length];
-
-                        return (
-                          <button
-                            key={defaultTag}
-                            onClick={() => handleToggleUserInterest(defaultTag)}
-                            className={`px-3.5 py-2 rounded-2xl text-xs font-extrabold transition-all duration-200 cursor-pointer flex items-center gap-1.5 border transform hover:-translate-y-0.5 active:translate-y-0 ${
-                              isSelected
-                                ? `bg-gradient-to-r ${activeGradient} text-white shadow-md scale-105 border-transparent ring-2 ring-white/50`
-                                : 'bg-slate-100 hover:bg-slate-200/80 text-slate-700 border-slate-200 shadow-2xs'
-                            }`}
-                          >
-                            <span className={isSelected ? 'text-amber-300' : 'text-[#0039A6]'}>#</span>
-                            <span>{defaultTag}</span>
-                            {isSelected ? (
-                              <div className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center ml-0.5">
-                                <Check className="w-3 h-3 text-amber-300" />
-                              </div>
-                            ) : (
-                              <div className="w-4 h-4 rounded-full bg-slate-200/80 flex items-center justify-center ml-0.5 opacity-60">
-                                <Plus className="w-2.5 h-2.5 text-slate-500" />
-                              </div>
-                            )}
-                          </button>
-                        );
-                      })}
-                      {user.interests
-                        .filter((i) => !['Engineering', 'Chemistry', 'Tech', 'Innovation', 'Clubs', 'Transfer Prep', 'Hackathons', 'Pre-Med / PA', 'MESA'].includes(i))
-                        .map((customTag) => (
-                          <button
-                            key={customTag}
-                            onClick={() => handleToggleUserInterest(customTag)}
-                            className="px-3.5 py-2 rounded-2xl text-xs font-extrabold bg-gradient-to-r from-[#0039A6] to-[#0077CC] text-white shadow-md shadow-blue-500/25 flex items-center gap-1.5 border border-transparent ring-2 ring-white/50 cursor-pointer transform hover:-translate-y-0.5 transition-all"
-                          >
-                            <span className="text-amber-300">#</span>
-                            <span>{customTag}</span>
-                            <div className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center ml-0.5">
-                              <Check className="w-3 h-3 text-amber-300" />
-                            </div>
-                          </button>
-                        ))}
-                    </div>
-                  </div>
 
                   {user.isAlumni && (
                     <div className="mt-4 p-4 rounded-2xl bg-indigo-50/80 border border-indigo-200/80 grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
@@ -2397,6 +2322,120 @@ export default function App() {
                     </div>
                   </div>
                 </div>
+              </div>
+
+              {/* LinkedIn-style Interests section */}
+              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                <div className="px-5 pt-5 flex items-start justify-between gap-3">
+                  <div>
+                    <h3 className="text-lg font-extrabold text-slate-900">Interests</h3>
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      Following {user.interests.length} · shown to classmates and alumni mentors
+                    </p>
+                  </div>
+                  {!isAddingInterest ? (
+                    <button
+                      onClick={() => setIsAddingInterest(true)}
+                      className="shrink-0 flex items-center gap-1 text-xs font-bold text-[#0039A6] border border-[#0039A6]/40 hover:bg-blue-50 px-3 h-9 rounded-full transition-colors cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" /> Add interest
+                    </button>
+                  ) : (
+                    <form onSubmit={handleAddUserInterest} className="flex items-center gap-1.5">
+                      <input
+                        type="text"
+                        value={newInterestInput}
+                        onChange={(e) => setNewInterestInput(e.target.value)}
+                        placeholder="e.g. Robotics"
+                        aria-label="New interest"
+                        className="w-32 bg-slate-100 border border-slate-300 rounded-lg px-2.5 h-9 text-xs focus:outline-none focus:border-[#0039A6]"
+                        autoFocus
+                      />
+                      <button type="submit" className="bg-[#0039A6] text-white text-xs font-bold px-3 h-9 rounded-lg cursor-pointer hover:bg-[#002D85]">
+                        Save
+                      </button>
+                      <button
+                        type="button"
+                        aria-label="Cancel"
+                        onClick={() => setIsAddingInterest(false)}
+                        className="text-slate-400 hover:text-slate-600 text-xs px-1.5 font-bold"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </form>
+                  )}
+                </div>
+
+                {/* Tabs */}
+                <div className="flex gap-1 px-5 mt-3 border-b border-slate-200">
+                  {['Topics', 'Clubs', 'Schools'].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => { setInterestTab(tab); setShowAllInterests(false); }}
+                      className={`px-3 pb-2.5 pt-1 text-sm font-bold border-b-2 -mb-px transition-colors cursor-pointer ${
+                        interestTab === tab
+                          ? 'border-[#0039A6] text-[#0039A6]'
+                          : 'border-transparent text-slate-500 hover:text-slate-800'
+                      }`}
+                    >
+                      {tab}
+                    </button>
+                  ))}
+                </div>
+
+                {(() => {
+                  const custom = user.interests
+                    .filter((name) => !INTEREST_DIRECTORY.some((d) => d.name === name))
+                    .map((name) => ({ name, type: 'Topics', followers: 1, color: 'bg-[#0039A6]', custom: true }));
+                  const items = [...custom, ...INTEREST_DIRECTORY]
+                    .filter((d) => d.type === interestTab)
+                    .sort((a, b) => Number(user.interests.includes(b.name)) - Number(user.interests.includes(a.name)));
+                  const visible = showAllInterests ? items : items.slice(0, 4);
+                  return (
+                    <>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 px-5 py-2">
+                        {visible.map((item) => {
+                          const following = user.interests.includes(item.name);
+                          const initials = item.name.replace(/[^A-Za-z ]/g, '').split(' ').filter(Boolean).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+                          return (
+                            <div key={item.name} className="flex items-start gap-3 py-3 border-b border-slate-100 last:border-b-0 sm:[&:nth-last-child(2)]:border-b-0">
+                              <div className={`w-12 h-12 ${interestTab === 'Topics' ? 'rounded-full' : 'rounded-lg'} ${item.color} text-white font-extrabold text-sm flex items-center justify-center shrink-0`}>
+                                {interestTab === 'Topics' ? '#' : initials}
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <div className="font-bold text-sm text-slate-900 truncate">{item.name}</div>
+                                <div className="text-xs text-slate-500">
+                                  {(item.followers + (following && !item.custom ? 1 : 0)).toLocaleString()} {item.followers === 1 && !following ? 'follower' : 'followers'}
+                                  {item.custom && ' · added by you'}
+                                </div>
+                                <button
+                                  onClick={() => handleToggleUserInterest(item.name)}
+                                  aria-pressed={following}
+                                  className={`mt-2 inline-flex items-center gap-1 h-8 px-3.5 rounded-full text-xs font-bold border transition-colors cursor-pointer ${
+                                    following
+                                      ? 'border-slate-400 text-slate-700 hover:bg-slate-100'
+                                      : 'border-[#0039A6] text-[#0039A6] hover:bg-blue-50'
+                                  }`}
+                                >
+                                  {following ? (<><Check className="w-3.5 h-3.5" /> Following</>) : (<><Plus className="w-3.5 h-3.5" /> Follow</>)}
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      {items.length > 4 && (
+                        <button
+                          onClick={() => setShowAllInterests((v) => !v)}
+                          className="w-full border-t border-slate-200 py-3 text-sm font-bold text-slate-600 hover:bg-slate-50 flex items-center justify-center gap-1 cursor-pointer"
+                        >
+                          {showAllInterests ? 'Show less' : `Show all ${items.length} ${interestTab.toLowerCase()}`}
+                          <ChevronRight className={`w-4 h-4 transition-transform ${showAllInterests ? '-rotate-90' : 'rotate-90'}`} />
+                        </button>
+                      )}
+                    </>
+                  );
+                })()}
               </div>
             </div>
           )}
