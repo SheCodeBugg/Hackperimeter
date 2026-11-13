@@ -6,8 +6,8 @@ Ask Panther Q&A, and a points leaderboard.
 **Live site:** https://shecodebugg.github.io/Hackperimeter/?v=2
 
 ## Where things live
-- `perimeter-link.tsx`: **the app** (edit this one). It's the Study Buddy version with the Ting version's Opportunities tab.
-- `perimeter-link-ting.tsx`, `perimeter_link_gsu_perimeter_college_student_hub (1).tsx`: earlier versions, kept for reference. They are not on the live site.
+- `perimeter-link.tsx`: **the app** (edit this one). Built from `perimeter_link_gsu_perimeter_college_student_hub (3).tsx` with the Ting version's Opportunities tab.
+- `perimeter-link-ting.tsx` and the `(1)` and `(3)` files: source versions, kept for reference. Not on the live site.
 - `src/`, `index.html`, `vite.config.ts`: build setup (rarely need to touch)
 
 ## Run it on your laptop

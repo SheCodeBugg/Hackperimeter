@@ -63,7 +63,17 @@ const INITIAL_USER = {
   campus: 'Dunwoody',
   major: 'Computer Science (A.S. Pathway)',
   gradYear: '2027',
+  isAlumni: false,
+  alumniDetails: {
+    yearsAttended: '2022 – 2024',
+    perimeterPathway: 'A.S. in Computer Science (Honors Pathway)',
+    gradClass: 'Class of 2024 • A.S. Computer Science',
+    currentRole: 'Software Engineer @ NCR Voyix (Midtown Atlanta)',
+    transferredTo: 'GSU Atlanta Campus (B.S. CS ’26)',
+    openToMentor: true
+  },
   bio: 'Pre-CS pathway student planning to transition to Atlanta campus in Fall 2027. MESA Tutor & Hackathon organizer.',
+  interests: ['Engineering', 'Chemistry', 'Tech', 'Innovation', 'Clubs', 'Transfer Prep', 'Hackathons'],
   points: 420,
   streak: 6,
   badges: [
@@ -79,11 +89,44 @@ const INITIAL_USER = {
 
 const INITIAL_STUDY_BUDDIES = [
   {
+    id: 'alumni-1',
+    name: 'Tariq Al-Mansoor',
+    avatar: 'TA',
+    campus: 'Alpharetta',
+    isAlumni: true,
+    yearsAttended: '2022 – 2024',
+    perimeterPathway: 'A.S. in Computer Science',
+    alumniTitle: 'SWE @ Cox Automotive',
+    major: 'Computer Science Alumni',
+    interests: ['Software Engineering', 'Transfer Prep', 'Hackathons'],
+    courses: ['CSC 1301', 'MATH 2212', 'Resume Review'],
+    studyStyle: '1-on-1 GSU Atlanta transition & tech interview prep',
+    availability: 'Thu 6:00 PM – 8:00 PM (Virtual)',
+    transferGoal: 'GSU Atlanta Campus (B.S. CS ’26)'
+  },
+  {
+    id: 'alumni-2',
+    name: 'Dr. Camille Desrosiers',
+    avatar: 'CD',
+    campus: 'Clarkston',
+    isAlumni: true,
+    yearsAttended: '2019 – 2021',
+    perimeterPathway: 'A.S. in Biology / Pre-Health',
+    alumniTitle: 'Physician Assistant (PA-C) @ Emory Healthcare',
+    major: 'Biology / Pre-Health Alumni',
+    interests: ['Pre-Med / PA', 'Clinical Hours', 'Research'],
+    courses: ['BIOL 2107', 'CHEM 2400', 'Pre-Health Advising'],
+    studyStyle: 'Clinical hours strategy & transfer essays',
+    availability: 'Sat 10:00 AM – 12:00 PM',
+    transferGoal: 'Emory University (B.S. Biology & PA-C)'
+  },
+  {
     id: 'ml-1',
     name: 'Maya Lin',
     avatar: 'ML',
     campus: 'Clarkston',
     major: 'Engineering Pathway',
+    interests: ['Robotics', 'MESA', 'Research', 'Transfer Prep'],
     courses: ['MATH 2212', 'PHYS 2211', 'ENGR 2010'],
     studyStyle: 'Whiteboard problem solving & MESA Lab',
     availability: 'Mon/Wed 1:00 PM – 4:00 PM',
@@ -95,6 +138,7 @@ const INITIAL_STUDY_BUDDIES = [
     avatar: 'CB',
     campus: 'Newton',
     major: 'Biology / Pre-Med',
+    interests: ['Pre-Med / PA', 'Honors College', 'Study Groups'],
     courses: ['BIOL 2107', 'CHEM 2400', 'ENGL 1102'],
     studyStyle: 'Flashcards, Anki decks & quiet library pods',
     availability: 'Tue/Thu 11:30 AM – 2:30 PM',
@@ -106,6 +150,7 @@ const INITIAL_STUDY_BUDDIES = [
     avatar: 'MS',
     campus: 'Decatur',
     major: 'Business Administration',
+    interests: ['Finance', 'SGA & Leadership', 'Case Competitions'],
     courses: ['ACCT 2101', 'ECON 2105', 'MATH 1401'],
     studyStyle: 'Group case prep & coffee shop sprints',
     availability: 'Wed/Fri 10:00 AM – 1:00 PM',
@@ -117,6 +162,7 @@ const INITIAL_STUDY_BUDDIES = [
     avatar: 'AH',
     campus: 'Dunwoody',
     major: 'Computer Science',
+    interests: ['Software Engineering', 'Hackathons', 'Code'],
     courses: ['CSC 1301', 'MATH 2211', 'PHYS 2211'],
     studyStyle: 'Pair programming & LeetCode study jams',
     availability: 'Tue/Thu 3:00 PM – 6:00 PM',
@@ -158,6 +204,34 @@ const INITIAL_CAMPUS_EVENTS = [
 ];
 
 const INITIAL_FEED_POSTS = [
+  {
+    id: 'post-alumni-welcome',
+    author: {
+      name: 'Camille Desrosiers',
+      handle: '@cdesrosiers_alum',
+      avatar: 'CD',
+      campus: 'Clarkston',
+      major: 'Biology A.S. ’21 ➡️ Emory PA-C',
+      badge: 'Perimeter Alumni',
+      isAlumni: true
+    },
+    type: 'alumni-spotlight',
+    timestamp: '1h ago',
+    location: 'Clarkston Alumni Network',
+    content: '🎓 ALUMNI MENTOR DROP-IN: Five years ago I was stressing over CHEM 2400 at Clarkston Campus! Now I’m practicing as a Physician Assistant in Atlanta. Hosting a free virtual Q&A + shadowing tips session for current Perimeter pre-health students this Saturday—drop your questions below!',
+    visualCard: {
+      gradient: 'from-[#1E1B4B] via-[#312E81] to-[#C59B27]',
+      emoji: '🎓🩺',
+      title: 'Perimeter Alumni Spotlight & Pre-Health AMA',
+      subtitle: 'Clarkston ’21 Alum • Open to Mentoring Current Panthers'
+    },
+    tags: ['#PerimeterAlumni', '#ClarkstonCampus', '#PreHealth', '#Mentorship'],
+    likes: 84,
+    liked: false,
+    comments: [
+      { id: 'c-alum-1', author: 'Chloe Bennett', campus: 'Newton', text: 'This is so inspiring! Just connected with you for pre-PA advice 🙌', time: '35m ago' }
+    ]
+  },
   {
     id: 'post-1',
     author: {
@@ -231,66 +305,75 @@ const INITIAL_FEED_POSTS = [
       gradient: 'from-[#002875] via-[#0039A6] to-[#C59B27]',
       emoji: '☕🎓',
       title: 'Decatur Fall Involvement Fair',
-      subtitle: '25+ Student Orgs • Career Services Pop-Up'
+      subtitle: 'Student Center Quad • Free Coffee & Swag'
     },
-    tags: ['#DecaturCampus', '#SGA', '#CampusLife', '#FreeCoffee'],
-    likes: 73,
-    liked: true,
-    comments: [
-      { id: 'c3', author: 'Amina Hassan', campus: 'Decatur', text: 'Omw right after my ECON 2105 lecture!', time: '3h ago' }
-    ]
-  },
-  {
-    id: 'post-3',
-    author: {
-      name: 'Chloe Bennett',
-      handle: '@chloeb_honors',
-      avatar: 'CB',
-      campus: 'Newton',
-      major: 'Biology / Pre-Med',
-      badge: 'Honors College'
-    },
-    type: 'study-spot',
-    timestamp: 'Yesterday',
-    location: 'Newton Campus Library - 2nd Floor',
-    content: 'Found the ultimate quiet study corner at Newton Campus with floor-to-ceiling forest views and whiteboards. Grinding through Organic Chemistry I flashcards before Friday’s exam. Drop your favorite study spots across Perimeter!',
-    visualCard: {
-      gradient: 'from-[#0F294A] via-[#1B4965] to-[#0077CC]',
-      emoji: '📚🌲',
-      title: 'Newton Library Quiet Zone',
-      subtitle: 'Study Check-In • BIOL 2107 / CHEM 2400 Prep'
-    },
-    tags: ['#StudySpot', '#NewtonCampus', '#PreMed', '#HonorsCollege'],
+    tags: ['#DecaturCampus', '#StudentLife', '#InvolvementFair', '#FreeCoffee'],
     likes: 39,
     liked: false,
-    comments: [
-      { id: 'c4', author: 'Liam O’Connor', campus: 'Alpharetta', text: 'Alpharetta Learning Commons pods are undefeated too!', time: '18h ago' }
+    comments: []
+  }
+];
+
+const INITIAL_QUESTIONS = [
+  {
+    id: 'q-1',
+    title: 'How does the transition to GSU Atlanta Campus work for A.S. Computer Science pathway?',
+    body: 'I am finishing my 2nd semester at Dunwoody Campus. Do my MATH 2211/2212 and CSC 1301 credits transfer automatically in PAWS when I hit 30 credit hours?',
+    author: {
+      name: 'Jordan Vance',
+      campus: 'Dunwoody',
+      badge: 'Campus Connector',
+      isAlumni: false
+    },
+    campus: 'Dunwoody',
+    tag: '#TransferTips',
+    courseCode: 'CSC 1301',
+    timestamp: '3h ago',
+    upvotes: 42,
+    userVote: 1,
+    answers: [
+      {
+        id: 'ans-1',
+        author: 'Tariq Al-Mansoor',
+        campus: 'Alpharetta',
+        badge: 'Perimeter Alumni • Class of 2024 • A.S. Computer Science',
+        isVerified: true,
+        isAlumni: true,
+        text: 'Yes! Once you apply for graduation or transition in PAWS with 30+ transferable credits, your advisor verifies your pathway. All your CSC and MATH courses transfer directly with full credit equivalents.',
+        timestamp: '2h ago',
+        upvotes: 19
+      }
     ]
   },
   {
-    id: 'post-4',
+    id: 'q-2',
+    title: 'Best professor or study resources for BIOL 2107 at Clarkston or Decatur?',
+    body: 'Taking Anatomy & Cell Biology next semester. Trying to figure out which lab manual and online modules help the most for practicals.',
     author: {
-      name: 'Tariq Al-Mansoor',
-      handle: '@tariq_codes',
-      avatar: 'TA',
-      campus: 'Alpharetta',
-      major: 'Computer Science',
-      badge: 'Transition Ambassador'
+      name: 'Chloe Bennett',
+      campus: 'Newton',
+      badge: 'Honors College',
+      isAlumni: false
     },
-    type: 'milestone',
-    timestamp: '2d ago',
-    location: 'Alpharetta Campus',
-    content: 'Officially got my transition approval to GSU Atlanta Campus for Spring AND accepted a Summer Software Engineering Internship in Midtown! Starting at Perimeter College saved me thousands while giving me small classes and mentors who actually cared.',
-    visualCard: {
-      gradient: 'from-[#0039A6] via-[#1E40AF] to-[#3B82F6]',
-      emoji: '🎉💼',
-      title: 'Perimeter ➡️ Atlanta Transition + SWE Offer!',
-      subtitle: 'Class of 2026 Associate of Science Graduate'
-    },
-    tags: ['#TransitionSuccess', '#AlpharettaCampus', '#Internship', '#GSU'],
-    likes: 112,
-    liked: false,
-    comments: []
+    campus: 'Clarkston',
+    tag: '#STEM',
+    courseCode: 'BIOL 2107',
+    timestamp: '5h ago',
+    upvotes: 28,
+    userVote: 0,
+    answers: [
+      {
+        id: 'ans-2',
+        author: 'Dr. Camille Desrosiers',
+        campus: 'Clarkston',
+        badge: 'Perimeter Alumni • Physician Assistant @ Emory',
+        isVerified: true,
+        isAlumni: true,
+        text: 'Make sure to use Quizlet sets specifically matching the Perimeter Clarkston lab practical slides and attend the MESA tutoring sessions on Thursdays!',
+        timestamp: '4h ago',
+        upvotes: 12
+      }
+    ]
   }
 ];
 
@@ -357,94 +440,8 @@ const INITIAL_OPPORTUNITIES = [
   }
 ];
 
-const INITIAL_QUESTIONS = [
-  {
-    id: 'q-1',
-    title: 'Best professors for Calculus II (MATH 2212) at Dunwoody or Online?',
-    body: 'I’m registering for Spring 2027 and transferring to Georgia Tech for Mechanical Engineering next fall, so I really want to build a strong foundation in Calc II. Who do you recommend at Dunwoody or synchronous online?',
-    author: {
-      name: 'Andre Washington',
-      campus: 'Dunwoody',
-      badge: 'Engineering Pathway'
-    },
-    campus: 'Dunwoody',
-    tag: '#Registration',
-    courseCode: 'MATH 2212',
-    timestamp: '3h ago',
-    upvotes: 34,
-    userVote: 0,
-    answers: [
-      {
-        id: 'a-1',
-        author: 'Jordan Vance',
-        campus: 'Dunwoody',
-        badge: 'MESA Tutor • Verified Peer',
-        isVerified: true,
-        text: 'Definitely look for Prof. K. Henderson at Dunwoody! Her guided notes for integration techniques and Taylor series saved my GPA, and she holds extra review sessions in the Math Lab before every exam.',
-        timestamp: '2h ago',
-        upvotes: 19
-      },
-      {
-        id: 'a-2',
-        author: 'Priya Nair',
-        campus: 'Online',
-        badge: 'Honors Mentor',
-        isVerified: true,
-        text: 'If you take it online, make sure to pair it with free Drop-In Tutoring on Upswing or the Dunwoody LTC. Also check the REPP transfer equivalency chart early!',
-        timestamp: '1h ago',
-        upvotes: 11
-      }
-    ]
-  },
-  {
-    id: 'q-2',
-    title: 'How smooth is the transition from Perimeter College to the GSU Atlanta Campus?',
-    body: 'I hit 30 credit hours this semester with a 3.6 GPA. Do I have to reapply from scratch, or is the transition form straightforward? Also, how does financial aid / HOPE carry over?',
-    author: {
-      name: 'Elena Gomez',
-      campus: 'Clarkston',
-      badge: 'Psychology A.S.'
-    },
-    campus: 'Clarkston',
-    tag: '#TransferTips',
-    courseCode: 'TRANS-30',
-    timestamp: '6h ago',
-    upvotes: 52,
-    userVote: 1,
-    answers: [
-      {
-        id: 'a-3',
-        author: 'Tariq Al-Mansoor',
-        campus: 'Alpharetta',
-        badge: 'Transition Ambassador',
-        isVerified: true,
-        text: 'Super smooth! You just submit the Campus Transition Request in PAWS—no application fee or essay needed since you’re already a GSU student. HOPE Scholarship transfers automatically as long as you stay above 3.0 at your 30/60 credit checkpoints!',
-        timestamp: '5h ago',
-        upvotes: 28
-      }
-    ]
-  },
-  {
-    id: 'q-3',
-    title: 'Anyone taking the Panther Express shuttle between Clarkston and Decatur?',
-    body: 'I have an 11:00 AM lab at Clarkston and a 1:30 PM speech class at Decatur on Tuesdays/Thursdays. Is the inter-campus shuttle reliable enough to make that gap?',
-    author: {
-      name: 'Kevin Park',
-      campus: 'Decatur',
-      badge: 'First-Year Panther'
-    },
-    campus: 'Decatur',
-    tag: '#CampusLife',
-    courseCode: 'SHUTTLE',
-    timestamp: '1d ago',
-    upvotes: 21,
-    userVote: 0,
-    answers: []
-  }
-];
-
 const LEADERBOARD_DATA = [
-  { rank: 1, name: 'Tariq Al-Mansoor', campus: 'Alpharetta', major: 'Computer Science', points: 890, badge: 'Transition Ambassador', avatar: 'TA' },
+  { rank: 1, name: 'Tariq Al-Mansoor', campus: 'Alpharetta', major: 'CS Alum • Cox Auto', points: 890, badge: 'Perimeter Alumni', isAlumni: true, avatar: 'TA' },
   { rank: 2, name: 'Maya Lin', campus: 'Clarkston', major: 'Engineering', points: 765, badge: 'MESA Scholar', avatar: 'ML' },
   { rank: 3, name: 'Marcus Sterling', campus: 'Decatur', major: 'Business Admin', points: 640, badge: 'SGA Senator', avatar: 'MS' },
   { rank: 4, name: 'Chloe Bennett', campus: 'Newton', major: 'Biology / Pre-Med', points: 530, badge: 'Honors College', avatar: 'CB' },
@@ -501,12 +498,20 @@ export default function App() {
   const [oppCategory, setOppCategory] = useState('All');
   const [oppView, setOppView] = useState('Explore');
   const [opportunitySort, setOpportunitySort] = useState('Recommended');
+  const [oppMajorFilter, setOppMajorFilter] = useState('All');
   const [askTagFilter, setAskTagFilter] = useState('All');
+  const [buddyRoleFilter, setBuddyRoleFilter] = useState('all'); // 'all' | 'students' | 'alumni'
+  const [selectedMajorFilter, setSelectedMajorFilter] = useState('All Majors');
+  const [selectedInterestFilter, setSelectedInterestFilter] = useState('All Interests');
 
   // Modals & Drawers
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [createType, setCreateType] = useState('feed'); // 'feed' | 'ask' | 'opp'
   const [isPointsModalOpen, setIsPointsModalOpen] = useState(false);
+
+  // New Interest addition state
+  const [newInterestInput, setNewInterestInput] = useState('');
+  const [isAddingInterest, setIsAddingInterest] = useState(false);
 
   // Comment & Answer Drafts
   const [commentDrafts, setCommentDrafts] = useState({});
@@ -539,12 +544,20 @@ export default function App() {
   // Dynamic Leaderboard including current user's live points
   const liveLeaderboard = useMemo(() => {
     const updated = LEADERBOARD_DATA.map((entry) =>
-      entry.isCurrentUser ? { ...entry, points: user.points } : entry
+      entry.isCurrentUser
+        ? {
+            ...entry,
+            points: user.points,
+            isAlumni: user.isAlumni,
+            badge: user.isAlumni ? 'Perimeter Alumni' : entry.badge,
+            major: user.isAlumni ? user.alumniDetails.currentRole : 'Computer Science'
+          }
+        : entry
     );
     return updated
       .sort((a, b) => b.points - a.points)
       .map((item, idx) => ({ ...item, rank: idx + 1 }));
-  }, [user.points]);
+  }, [user.points, user.isAlumni, user.alumniDetails.currentRole]);
 
   const tier = getTierInfo(user.points);
   const progressPercent = Math.min(100, Math.round((user.points / tier.next) * 100));
@@ -563,6 +576,38 @@ export default function App() {
     });
   }, [posts, selectedCampus, searchQuery]);
 
+  // Filtered Study Buddies & Alumni Mentors
+  const filteredBuddies = useMemo(() => {
+    return studyBuddies.filter((buddy) => {
+      const matchesCampus =
+        selectedCampus === 'All Campuses' || buddy.campus === selectedCampus;
+      const matchesRole =
+        buddyRoleFilter === 'all' ||
+        (buddyRoleFilter === 'alumni' && buddy.isAlumni) ||
+        (buddyRoleFilter === 'students' && !buddy.isAlumni);
+      
+      const matchesMajor =
+        selectedMajorFilter === 'All Majors' ||
+        buddy.major.toLowerCase().includes(selectedMajorFilter.toLowerCase());
+
+      const matchesInterest =
+        selectedInterestFilter === 'All Interests' ||
+        (buddy.interests && buddy.interests.includes(selectedInterestFilter));
+
+      const matchesCourse =
+        !courseFilter.trim() ||
+        buddy.courses.some((c) => c.toLowerCase().includes(courseFilter.toLowerCase())) ||
+        buddy.major.toLowerCase().includes(courseFilter.toLowerCase()) ||
+        buddy.name.toLowerCase().includes(courseFilter.toLowerCase());
+      const matchesGlobalSearch =
+        !searchQuery.trim() ||
+        buddy.courses.some((c) => c.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        buddy.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        buddy.major.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCampus && matchesRole && matchesMajor && matchesInterest && matchesCourse && matchesGlobalSearch;
+    });
+  }, [studyBuddies, selectedCampus, buddyRoleFilter, selectedMajorFilter, selectedInterestFilter, courseFilter, searchQuery]);
+
   // Filtered Opportunities
   const filteredOpportunities = useMemo(() => {
     const filtered = opportunities.filter((opp) => {
@@ -578,7 +623,7 @@ export default function App() {
     return filtered;
   }, [opportunities, selectedCampus, oppCategory, oppView, user.savedOpps, searchQuery, opportunitySort]);
 
-  // Filtered Ask Panther Questions
+  // Filtered Questions (Ask Panther)
   const filteredQuestions = useMemo(() => {
     return questions.filter((q) => {
       const matchesCampus =
@@ -588,33 +633,43 @@ export default function App() {
         !searchQuery.trim() ||
         q.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         q.body.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        q.tag.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (q.courseCode && q.courseCode.toLowerCase().includes(searchQuery.toLowerCase()));
       return matchesCampus && matchesTag && matchesQuery;
     });
   }, [questions, selectedCampus, askTagFilter, searchQuery]);
 
-  // Filtered Study Buddies
-  const filteredBuddies = useMemo(() => {
-    return studyBuddies.filter((buddy) => {
-      const matchesCampus =
-        selectedCampus === 'All Campuses' || buddy.campus === selectedCampus;
-      const matchesCourse =
-        !courseFilter.trim() ||
-        buddy.courses.some((c) => c.toLowerCase().includes(courseFilter.toLowerCase())) ||
-        buddy.major.toLowerCase().includes(courseFilter.toLowerCase()) ||
-        buddy.name.toLowerCase().includes(courseFilter.toLowerCase());
-      const matchesGlobalSearch =
-        !searchQuery.trim() ||
-        buddy.courses.some((c) => c.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        buddy.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        buddy.major.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCampus && matchesCourse && matchesGlobalSearch;
-    });
-  }, [studyBuddies, selectedCampus, courseFilter, searchQuery]);
-
   // ============================================================================
   // INTERACTION HANDLERS
   // ============================================================================
+
+  const handleToggleAlumniStatus = () => {
+    setUser((prev) => {
+      const nextAlumni = !prev.isAlumni;
+      const newBadge = {
+        id: 'b-alumni',
+        name: 'Perimeter Alumni',
+        icon: '🎓',
+        desc: 'Verified former Perimeter College student mentoring current Panthers'
+      };
+      const hasBadge = prev.badges.some((b) => b.id === 'b-alumni');
+      return {
+        ...prev,
+        isAlumni: nextAlumni,
+        major: nextAlumni ? prev.alumniDetails.perimeterPathway : 'Computer Science (A.S. Pathway)',
+        bio: nextAlumni
+          ? `${prev.alumniDetails.currentRole} • Transferred to ${prev.alumniDetails.transferredTo}. Happy to help current Perimeter Panthers!`
+          : 'Pre-CS pathway student planning to transition to Atlanta campus in Fall 2027. MESA Tutor & Hackathon organizer.',
+        badges: nextAlumni && !hasBadge ? [newBadge, ...prev.badges] : prev.badges
+      };
+    });
+    awardPoints(
+      25,
+      !user.isAlumni
+        ? 'Activated Perimeter Alumni Mentor Status!'
+        : 'Switched back to Current Student view'
+    );
+  };
 
   const handleToggleConnectPeer = (peer) => {
     const alreadyConnected = user.connectedPeers.includes(peer.id);
@@ -710,6 +765,7 @@ export default function App() {
               id: `c-${Date.now()}`,
               author: user.name,
               campus: user.campus,
+              isAlumni: user.isAlumni,
               text,
               time: 'Just now'
             }
@@ -777,8 +833,11 @@ export default function App() {
               id: `ans-${Date.now()}`,
               author: user.name,
               campus: user.campus,
-              badge: 'Campus Connector • Verified Student',
+              badge: user.isAlumni
+                ? `Perimeter Alumni • ${user.alumniDetails.gradClass}`
+                : 'Campus Connector • Verified Student',
               isVerified: true,
+              isAlumni: user.isAlumni,
               text,
               timestamp: 'Just now',
               upvotes: 1
@@ -789,7 +848,12 @@ export default function App() {
     );
     setAnswerDrafts((prev) => ({ ...prev, [qId]: '' }));
     setExpandedAnswers((prev) => ({ ...prev, [qId]: true }));
-    awardPoints(15, 'Answered a peer question on Ask Panther');
+    awardPoints(
+      user.isAlumni ? 25 : 15,
+      user.isAlumni
+        ? 'Alumni Mentor answered a student question!'
+        : 'Answered a peer question on Ask Panther'
+    );
   };
 
   const handleCreateSubmit = (e) => {
@@ -805,26 +869,34 @@ export default function App() {
           avatar: user.avatar,
           campus: formCampus,
           major: user.major,
-          badge: tier.title
+          badge: user.isAlumni ? 'Perimeter Alumni' : tier.title,
+          isAlumni: user.isAlumni
         },
-        type: 'campus-life',
+        type: user.isAlumni ? 'alumni-spotlight' : 'campus-life',
         timestamp: 'Just now',
-        location: `${formCampus} Campus`,
+        location: user.isAlumni ? `${formCampus} Alumni Network` : `${formCampus} Campus`,
         content: formBody.trim(),
         visualCard: {
-          gradient: formVisualTheme,
-          emoji: '🐾✨',
+          gradient: user.isAlumni
+            ? 'from-[#1E1B4B] via-[#312E81] to-[#C59B27]'
+            : formVisualTheme,
+          emoji: user.isAlumni ? '🎓🐾' : '🐾✨',
           title: formTitle.trim() || `${formCampus} Campus Check-In`,
           subtitle: `${user.major} • Perimeter Link Update`
         },
-        tags: [formTag, `#${formCampus}Campus`, '#PerimeterLink'],
+        tags: [
+          ...(user.isAlumni ? ['#PerimeterAlumni'] : []),
+          formTag,
+          `#${formCampus}Campus`,
+          '#PerimeterLink'
+        ],
         likes: 1,
         liked: true,
         comments: []
       };
       setPosts([newPost, ...posts]);
       setActiveTab('feed');
-      awardPoints(25, 'Shared a Campus Feed update');
+      awardPoints(25, 'Posted a new Campus Feed update');
     } else if (createType === 'ask') {
       const newQuestion = {
         id: `q-${Date.now()}`,
@@ -833,7 +905,8 @@ export default function App() {
         author: {
           name: user.name,
           campus: formCampus,
-          badge: user.major
+          badge: user.isAlumni ? 'Perimeter Alumni' : tier.title,
+          isAlumni: user.isAlumni
         },
         campus: formCampus,
         tag: formTag,
@@ -885,6 +958,37 @@ export default function App() {
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, 3800);
+  };
+
+  const handleToggleUserInterest = (interestName) => {
+    setUser((prev) => {
+      const exists = prev.interests.includes(interestName);
+      return {
+        ...prev,
+        interests: exists
+          ? prev.interests.filter((i) => i !== interestName)
+          : [...prev.interests, interestName]
+      };
+    });
+    awardPoints(2, `Updated interest tag: #${interestName}`);
+  };
+
+  const handleAddUserInterest = (e) => {
+    e.preventDefault();
+    if (!newInterestInput.trim()) return;
+    const cleanTag = newInterestInput.trim().replace(/^#/, '');
+    if (user.interests.includes(cleanTag)) {
+      setNewInterestInput('');
+      setIsAddingInterest(false);
+      return;
+    }
+    setUser((prev) => ({
+      ...prev,
+      interests: [...prev.interests, cleanTag]
+    }));
+    setNewInterestInput('');
+    setIsAddingInterest(false);
+    awardPoints(5, `Added new interest: #${cleanTag}`);
   };
 
   // ============================================================================
@@ -1036,26 +1140,105 @@ export default function App() {
       <div className="max-w-7xl mx-auto px-3 sm:px-6 pt-5 grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* LEFT SIDEBAR: Navigation & Student Mini-Profile (Desktop) */}
         <aside className="hidden lg:block lg:col-span-3 space-y-5">
-          {/* Student Profile Card */}
+          {/* Student / Alumni Profile Card */}
           <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-            <div className="h-16 bg-gradient-to-r from-[#0039A6] via-[#0055D4] to-[#0077CC] relative">
+            <div
+              className={`h-16 relative ${
+                user.isAlumni
+                  ? 'bg-gradient-to-r from-[#1E1B4B] via-[#312E81] to-[#C59B27]'
+                  : 'bg-gradient-to-r from-[#0039A6] via-[#0055D4] to-[#0077CC]'
+              }`}
+            >
               <span className="absolute right-3 top-2.5 text-[11px] font-bold bg-white/20 backdrop-blur-sm text-white px-2.5 py-0.5 rounded-full">
-                {user.campus} Campus
+                {user.isAlumni ? `🎓 ${user.campus} Alum` : `${user.campus} Campus`}
               </span>
             </div>
             <div className="px-5 pb-5">
               <div className="-mt-8 mb-3 flex items-end justify-between">
-                <div className="w-16 h-16 rounded-2xl bg-[#002875] text-white font-extrabold text-xl flex items-center justify-center border-4 border-white shadow-md">
+                <div
+                  className={`w-16 h-16 rounded-2xl text-white font-extrabold text-xl flex items-center justify-center border-4 border-white shadow-md ${
+                    user.isAlumni ? 'bg-[#1E1B4B]' : 'bg-[#002875]'
+                  }`}
+                >
                   {user.avatar}
                 </div>
-                <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
-                  <Flame className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
-                  {user.streak}d streak
-                </span>
+                {user.isAlumni ? (
+                  <span className="inline-flex items-center gap-1 text-xs font-extrabold text-amber-800 bg-amber-100 border border-amber-300 px-2.5 py-1 rounded-full">
+                    <GraduationCap className="w-3.5 h-3.5 text-amber-700" />
+                    Alumni Mentor
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
+                    <Flame className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                    {user.streak}d streak
+                  </span>
+                )}
               </div>
-              <h2 className="font-bold text-base text-slate-900">{user.name}</h2>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <h2 className="font-bold text-base text-slate-900">{user.name}</h2>
+                {user.isAlumni && (
+                  <span className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider bg-indigo-950 text-amber-300 px-2 py-0.5 rounded-full shadow-xs">
+                    <GraduationCap className="w-3 h-3" /> Perimeter Alumni
+                  </span>
+                )}
+              </div>
               <p className="text-xs text-slate-500 font-medium">{user.major}</p>
               <p className="text-xs text-slate-600 mt-2 leading-relaxed">{user.bio}</p>
+
+              {/* Compact Alumni Details Card on Sidebar */}
+              {user.isAlumni && (
+                <div className="mt-3 p-2.5 rounded-xl bg-indigo-50/80 border border-indigo-200/80 space-y-1.5 text-[11px]">
+                  <div>
+                    <span className="font-extrabold text-indigo-950 block text-[10px] uppercase">
+                      Years at Perimeter
+                    </span>
+                    <span className="text-slate-700 font-semibold">
+                      {user.alumniDetails.yearsAttended} ({user.campus})
+                    </span>
+                  </div>
+                  <div>
+                    <span className="font-extrabold text-indigo-950 block text-[10px] uppercase">
+                      Perimeter Pathway
+                    </span>
+                    <span className="text-slate-700 font-semibold">
+                      {user.alumniDetails.perimeterPathway}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="font-extrabold text-indigo-950 block text-[10px] uppercase">
+                      Post-Perimeter Pathway
+                    </span>
+                    <span className="text-slate-700 font-semibold">
+                      {user.alumniDetails.transferredTo}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="font-extrabold text-indigo-950 block text-[10px] uppercase">
+                      Current Career / Role
+                    </span>
+                    <span className="text-slate-700 font-semibold">
+                      {user.alumniDetails.currentRole}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Toggle Current Student / Alumni Status */}
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <button
+                  onClick={handleToggleAlumniStatus}
+                  className={`w-full py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-center gap-1.5 transition-all cursor-pointer border ${
+                    user.isAlumni
+                      ? 'bg-indigo-50 text-indigo-950 border-indigo-200 hover:bg-indigo-100'
+                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-900'
+                  }`}
+                >
+                  <GraduationCap className="w-3.5 h-3.5 text-[#0039A6]" />
+                  {user.isAlumni
+                    ? 'Status: Perimeter Alumni (Switch)'
+                    : 'Attended Previously? Set Alumni Status'}
+                </button>
+              </div>
 
               {/* Panther Points Progress */}
               <div className="mt-4 pt-3.5 border-t border-slate-100">
@@ -1084,8 +1267,8 @@ export default function App() {
           {/* Primary Navigation Menu */}
           <nav className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-2 space-y-1">
             {[
-              { id: 'feed', label: 'Campus Feed', icon: Home, desc: 'Photos, Swaps & Student Life' },
-              { id: 'buddies', label: 'Study Buddies', icon: Users, desc: 'Match by Course & Campus' },
+              { id: 'feed', label: 'Campus Feed', icon: Home, desc: 'Photos, Swaps & Alumni Spotlights' },
+              { id: 'buddies', label: 'Buddies & Alumni', icon: Users, desc: 'Classmates & Alumni Mentors' },
               { id: 'opportunities', label: 'Opportunities', icon: Briefcase, desc: 'Internships, REUs & Jobs' },
               { id: 'ask', label: 'Ask Panther', icon: HelpCircle, desc: 'Profs, Classes & Transfer Q&A' },
               { id: 'hub', label: 'Panther Hub', icon: Trophy, desc: 'Leaderboard & Badges' }
@@ -1251,7 +1434,14 @@ export default function App() {
                             <h3 className="font-bold text-sm text-slate-900">
                               {post.author.name}
                             </h3>
-                            <span className="text-[11px] font-bold bg-blue-50 text-[#0039A6] px-2 py-0.5 rounded-full border border-blue-100">
+                            <span
+                              className={`text-[11px] font-bold px-2 py-0.5 rounded-full border inline-flex items-center gap-1 ${
+                                post.author.isAlumni
+                                  ? 'bg-indigo-950 text-amber-300 border-indigo-900'
+                                  : 'bg-blue-50 text-[#0039A6] border-blue-100'
+                              }`}
+                            >
+                              {post.author.isAlumni && <GraduationCap className="w-3 h-3" />}
                               {post.author.badge}
                             </span>
                           </div>
@@ -1360,45 +1550,24 @@ export default function App() {
                               {c.author[0]}
                             </div>
                             <div className="bg-white border border-slate-200/80 rounded-xl px-3 py-2 flex-1">
-                              <div className="flex items-center justify-between">
-                                <span className="font-bold text-slate-800">
-                                  {c.author}{' '}
+                              <div className="flex items-center justify-between gap-2 flex-wrap">
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span className="font-bold text-slate-800">{c.author}</span>
+                                  {c.isAlumni && (
+                                    <span className="inline-flex items-center gap-0.5 text-[10px] font-extrabold bg-indigo-950 text-amber-300 px-1.5 py-0.2 rounded-full">
+                                      <GraduationCap className="w-2.5 h-2.5" /> Alumni
+                                    </span>
+                                  )}
                                   <span className="text-[10px] font-semibold text-[#0077CC]">
                                     • {c.campus}
                                   </span>
-                                </span>
+                                </div>
                                 <span className="text-[10px] text-slate-400">{c.time}</span>
                               </div>
                               <p className="text-slate-700 mt-0.5">{c.text}</p>
                             </div>
                           </div>
                         ))}
-
-                        {/* Add Comment Input */}
-                        <div className="flex items-center gap-2 pt-1">
-                          <input
-                            type="text"
-                            value={commentDrafts[post.id] || ''}
-                            onChange={(e) =>
-                              setCommentDrafts((prev) => ({
-                                ...prev,
-                                [post.id]: e.target.value
-                              }))
-                            }
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') handleAddComment(post.id);
-                            }}
-                            placeholder="Write a supportive comment (+10 pts)..."
-                            className="flex-1 bg-white border border-slate-200 rounded-full px-3.5 py-1.5 text-xs focus:outline-none focus:border-[#0039A6]"
-                          />
-                          <button
-                            onClick={() => handleAddComment(post.id)}
-                            className="bg-[#0039A6] hover:bg-[#002D85] text-white p-1.5 rounded-full transition-colors cursor-pointer"
-                            title="Post Comment"
-                          >
-                            <Send className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
                       </div>
                     )}
                   </article>
@@ -1408,109 +1577,259 @@ export default function App() {
           )}
 
           {/* ================================================================
-              TAB 1.5: STUDY BUDDIES & CLASSMATE MATCHER
+              TAB 1.5: STUDY BUDDIES & ALUMNI MENTOR MATCHER
              ================================================================ */}
           {activeTab === 'buddies' && (
             <div className="space-y-4">
               <div className="bg-gradient-to-r from-[#002875] via-[#0039A6] to-[#0077CC] rounded-2xl p-5 text-white shadow-sm">
-                <span className="text-[11px] font-bold uppercase tracking-wider bg-amber-400 text-[#002875] px-2.5 py-0.5 rounded-full">
-                  Course & Transfer Matcher
-                </span>
-                <h2 className="text-xl font-extrabold mt-2">Find Your Perimeter Study Crew</h2>
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <span className="text-[11px] font-bold uppercase tracking-wider bg-amber-400 text-[#002875] px-2.5 py-0.5 rounded-full">
+                    Course & Alumni Mentor Matcher
+                  </span>
+                  <div className="flex items-center gap-1 bg-white/15 p-1 rounded-full text-xs font-bold">
+                    {[
+                      { id: 'all', label: 'All' },
+                      { id: 'students', label: 'Current Students' },
+                      { id: 'alumni', label: '🎓 Perimeter Alumni' }
+                    ].map((f) => (
+                      <button
+                        key={f.id}
+                        onClick={() => setBuddyRoleFilter(f.id)}
+                        className={`px-2.5 py-1 rounded-full transition-all cursor-pointer ${
+                          buddyRoleFilter === f.id
+                            ? 'bg-white text-[#0039A6]'
+                            : 'text-white hover:bg-white/10'
+                        }`}
+                      >
+                        {f.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <h2 className="text-xl font-extrabold mt-2">
+                  Connect with Classmates & Perimeter Alumni
+                </h2>
                 <p className="text-xs sm:text-sm text-blue-100 mt-1">
-                  Commuter campuses don’t have to feel lonely. Search by course code (like <strong className="text-white">MATH 2212</strong> or <strong className="text-white">BIOL 2107</strong>), connect, and earn <strong className="text-amber-300">+15 pts</strong> per new classmate connection!
+                  Find study partners in <strong className="text-white">MATH 2212</strong> or <strong className="text-white">BIOL 2107</strong>, or filter by major and student interests below!
                 </p>
 
-                <div className="mt-4 relative">
+                {/* MAJOR & INTEREST FILTER DROPDOWNS */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 pt-3 border-t border-white/20">
+                  <div>
+                    <label className="block text-[11px] font-bold text-blue-100 mb-1 uppercase tracking-wider">
+                      Filter by Major / Pathway
+                    </label>
+                    <select
+                      value={selectedMajorFilter}
+                      onChange={(e) => setSelectedMajorFilter(e.target.value)}
+                      className="w-full bg-white/15 hover:bg-white/25 text-white text-xs font-bold rounded-xl px-3 py-2 border border-white/20 focus:outline-none cursor-pointer"
+                    >
+                      {[
+                        'All Majors',
+                        'Computer Science',
+                        'Biology / Pre-Med',
+                        'Business Administration',
+                        'Engineering Pathway'
+                      ].map((m) => (
+                        <option key={m} value={m} className="text-slate-900 bg-white">
+                          {m}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-blue-100 mb-1 uppercase tracking-wider">
+                      Filter by Interest / Goal
+                    </label>
+                    <select
+                      value={selectedInterestFilter}
+                      onChange={(e) => setSelectedInterestFilter(e.target.value)}
+                      className="w-full bg-white/15 hover:bg-white/25 text-white text-xs font-bold rounded-xl px-3 py-2 border border-white/20 focus:outline-none cursor-pointer"
+                    >
+                      {[
+                        'All Interests',
+                        'Software Engineering',
+                        'Transfer Prep',
+                        'Hackathons',
+                        'Pre-Med / PA',
+                        'Clinical Hours',
+                        'Robotics',
+                        'MESA',
+                        'Finance',
+                        'SGA & Leadership'
+                      ].map((i) => (
+                        <option key={i} value={i} className="text-slate-900 bg-white">
+                          {i}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="mt-3 relative">
                   <BookOpen className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     value={courseFilter}
                     onChange={(e) => setCourseFilter(e.target.value)}
-                    placeholder="Filter by course code (e.g., MATH 2212, CHEM 2400, CSC 1301)..."
+                    placeholder="Search courses (e.g., MATH 2212, BIOL 2107, Resume)..."
                     className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white text-slate-900 text-xs sm:text-sm font-medium focus:outline-none shadow-inner"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {filteredBuddies.map((buddy) => {
-                  const isConnected = user.connectedPeers.includes(buddy.id);
-                  return (
-                    <div
-                      key={buddy.id}
-                      className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 flex flex-col justify-between hover:border-[#0039A6]/40 transition-all"
-                    >
-                      <div>
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="flex items-center gap-3">
-                            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#0039A6] to-[#0077CC] text-white font-extrabold flex items-center justify-center shadow-xs">
-                              {buddy.avatar}
-                            </div>
-                            <div>
-                              <h3 className="font-extrabold text-sm text-slate-900">
-                                {buddy.name}
-                              </h3>
-                              <p className="text-[11px] font-semibold text-[#0077CC]">
-                                {buddy.campus} Campus • {buddy.major}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="mt-3">
-                          <p className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">
-                            Current Courses
-                          </p>
-                          <div className="flex flex-wrap gap-1.5">
-                            {buddy.courses.map((course) => (
-                              <span
-                                key={course}
-                                onClick={() => setCourseFilter(course)}
-                                className="text-[11px] font-bold bg-blue-50 text-[#0039A6] px-2.5 py-0.5 rounded-md border border-blue-100 cursor-pointer hover:bg-blue-100"
+                {filteredBuddies.length === 0 ? (
+                  <div className="col-span-2 bg-white rounded-2xl border border-slate-200 p-8 text-center">
+                    <p className="text-3xl mb-2">🔍</p>
+                    <h3 className="font-bold text-slate-800">No peers match this major & interest filter</h3>
+                    <p className="text-xs text-slate-500 mt-1">Try resetting your major or interest filter above.</p>
+                  </div>
+                ) : (
+                  filteredBuddies.map((buddy) => {
+                    const isConnected = user.connectedPeers.includes(buddy.id);
+                    return (
+                      <div
+                        key={buddy.id}
+                        className={`bg-white rounded-2xl border shadow-sm p-4 flex flex-col justify-between transition-all ${
+                          buddy.isAlumni
+                            ? 'border-amber-300/80 hover:border-amber-400'
+                            : 'border-slate-200/80 hover:border-[#0039A6]/40'
+                        }`}
+                      >
+                        <div>
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="flex items-center gap-3">
+                              <div
+                                className={`w-11 h-11 rounded-2xl text-white font-extrabold flex items-center justify-center shadow-xs ${
+                                  buddy.isAlumni
+                                    ? 'bg-gradient-to-br from-[#1E1B4B] to-[#C59B27]'
+                                    : 'bg-gradient-to-br from-[#0039A6] to-[#0077CC]'
+                                }`}
                               >
-                                {course}
-                              </span>
-                            ))}
+                                {buddy.avatar}
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <h3 className="font-extrabold text-sm text-slate-900">
+                                    {buddy.name}
+                                  </h3>
+                                  {buddy.isAlumni && (
+                                    <span className="inline-flex items-center gap-1 text-[10px] font-extrabold bg-indigo-950 text-amber-300 px-2 py-0.5 rounded-full">
+                                      <GraduationCap className="w-3 h-3" /> Alumni
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-[11px] font-semibold text-[#0077CC]">
+                                  {buddy.isAlumni
+                                    ? `${buddy.campus} Alum • ${buddy.alumniTitle}`
+                                    : `${buddy.campus} Campus • ${buddy.major}`}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Interests Tags */}
+                          {buddy.interests && (
+                            <div className="mt-2.5 flex flex-wrap gap-1">
+                              {buddy.interests.map((interest) => (
+                                <span
+                                  key={interest}
+                                  onClick={() => setSelectedInterestFilter(interest)}
+                                  className="text-[10px] font-bold bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-[#0039A6] px-2 py-0.5 rounded-full cursor-pointer transition-colors"
+                                >
+                                  #{interest}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+
+                          <div className="mt-3">
+                            <p className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">
+                              {buddy.isAlumni ? 'Can Mentor On' : 'Current Courses'}
+                            </p>
+                            <div className="flex flex-wrap gap-1.5">
+                              {buddy.courses.map((course) => (
+                                <span
+                                  key={course}
+                                  onClick={() => setCourseFilter(course)}
+                                  className={`text-[11px] font-bold px-2.5 py-0.5 rounded-md border cursor-pointer ${
+                                    buddy.isAlumni
+                                      ? 'bg-amber-50 text-amber-900 border-amber-200 hover:bg-amber-100'
+                                      : 'bg-blue-50 text-[#0039A6] border-blue-100 hover:bg-blue-100'
+                                  }`}
+                                >
+                                  {course}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="mt-3 space-y-1 text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                            {buddy.isAlumni ? (
+                              <>
+                                <p>
+                                  <strong className="text-slate-800">Years Attended:</strong>{' '}
+                                  {buddy.yearsAttended} ({buddy.campus})
+                                </p>
+                                <p>
+                                  <strong className="text-slate-800">Perimeter Pathway:</strong>{' '}
+                                  {buddy.perimeterPathway}
+                                </p>
+                                <p>
+                                  <strong className="text-slate-800">Post-Perimeter:</strong>{' '}
+                                  {buddy.transferGoal}
+                                </p>
+                                <p>
+                                  <strong className="text-slate-800">Current Career:</strong>{' '}
+                                  {buddy.alumniTitle}
+                                </p>
+                              </>
+                            ) : (
+                              <>
+                                <p>
+                                  <strong className="text-slate-800">Vibe:</strong> {buddy.studyStyle}
+                                </p>
+                                <p>
+                                  <strong className="text-slate-800">Free:</strong> {buddy.availability}
+                                </p>
+                                <p>
+                                  <strong className="text-slate-800">Goal:</strong> {buddy.transferGoal}
+                                </p>
+                              </>
+                            )}
                           </div>
                         </div>
 
-                        <div className="mt-3 space-y-1 text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                          <p>
-                            <strong className="text-slate-800">Vibe:</strong> {buddy.studyStyle}
-                          </p>
-                          <p>
-                            <strong className="text-slate-800">Free:</strong> {buddy.availability}
-                          </p>
-                          <p>
-                            <strong className="text-slate-800">Goal:</strong> {buddy.transferGoal}
-                          </p>
+                        <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2">
+                          <button
+                            onClick={() => handleToggleConnectPeer(buddy)}
+                            className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
+                              isConnected
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
+                                : buddy.isAlumni
+                                ? 'bg-indigo-950 hover:bg-indigo-900 text-amber-300 shadow-xs'
+                                : 'bg-[#0039A6] hover:bg-[#002D85] text-white shadow-xs'
+                            }`}
+                          >
+                            {isConnected ? (
+                              <>
+                                <MessageSquare className="w-3.5 h-3.5" />{' '}
+                                {buddy.isAlumni ? 'Message Alumni Mentor' : 'Message Study Buddy'}
+                              </>
+                            ) : (
+                              <>
+                                <UserPlus className="w-3.5 h-3.5" />{' '}
+                                {buddy.isAlumni ? 'Request Mentorship (+15 pts)' : 'Connect (+15 pts)'}
+                              </>
+                            )}
+                          </button>
                         </div>
                       </div>
-
-                      <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2">
-                        <button
-                          onClick={() => handleToggleConnectPeer(buddy)}
-                          className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
-                            isConnected
-                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
-                              : 'bg-[#0039A6] hover:bg-[#002D85] text-white shadow-xs'
-                          }`}
-                        >
-                          {isConnected ? (
-                            <>
-                              <MessageSquare className="w-3.5 h-3.5" /> Message Study Buddy
-                            </>
-                          ) : (
-                            <>
-                              <UserPlus className="w-3.5 h-3.5" /> Connect (+15 pts)
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                )}
               </div>
             </div>
           )}
@@ -1763,9 +2082,15 @@ export default function App() {
                       )}
                       <span className="font-semibold text-[#0077CC]">{q.campus} Campus</span>
                       <span>•</span>
-                      <span>
-                        Posted by <strong className="text-slate-700">{q.author.name}</strong> (
-                        {q.author.badge})
+                      <span className="inline-flex items-center gap-1 flex-wrap">
+                        Posted by <strong className="text-slate-700">{q.author.name}</strong>
+                        {q.author.isAlumni ? (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-extrabold bg-indigo-950 text-amber-300 px-2 py-0.5 rounded-full">
+                            <GraduationCap className="w-2.5 h-2.5" /> Perimeter Alumni
+                          </span>
+                        ) : (
+                          <span>({q.author.badge})</span>
+                        )}
                       </span>
                       <span>•</span>
                       <span>{q.timestamp}</span>
@@ -1801,20 +2126,34 @@ export default function App() {
                         {q.answers.map((ans) => (
                           <div
                             key={ans.id}
-                            className="bg-slate-50 rounded-xl p-3 border border-slate-200/70"
+                            className={`rounded-xl p-3 border ${
+                              ans.isAlumni
+                                ? 'bg-amber-50/50 border-amber-200'
+                                : 'bg-slate-50 border-slate-200/70'
+                            }`}
                           >
                             <div className="flex items-center justify-between gap-2 flex-wrap">
                               <div className="flex items-center gap-1.5">
-                                <span className="text-xs font-bold text-slate-900">
-                                  {ans.author}
-                                </span>
-                                {ans.isVerified && (
-                                  <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-[#0039A6] text-white px-2 py-0.5 rounded-full">
+                              <span className="text-xs font-bold text-slate-900">
+                                {ans.author}
+                              </span>
+                              {ans.isVerified && (
+                                <span
+                                  className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                                    ans.isAlumni
+                                      ? 'bg-indigo-950 text-amber-300'
+                                      : 'bg-[#0039A6] text-white'
+                                  }`}
+                                >
+                                  {ans.isAlumni ? (
+                                    <GraduationCap className="w-2.5 h-2.5 text-amber-300" />
+                                  ) : (
                                     <CheckCircle2 className="w-2.5 h-2.5 text-amber-300" />
-                                    {ans.badge}
-                                  </span>
-                                )}
-                              </div>
+                                  )}
+                                  {ans.badge}
+                                </span>
+                              )}
+                            </div>
                               <span className="text-[11px] text-slate-400">{ans.timestamp}</span>
                             </div>
                             <p className="text-xs sm:text-sm text-slate-700 mt-1.5 leading-relaxed">
@@ -1860,21 +2199,45 @@ export default function App() {
              ================================================================ */}
           {activeTab === 'hub' && (
             <div className="space-y-5">
-              {/* Student Profile Overview Card */}
+              {/* Student / Alumni Profile Overview Card */}
               <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-                <div className="h-24 bg-gradient-to-r from-[#002875] via-[#0039A6] to-[#0077CC] p-4 flex justify-end items-start">
+                <div
+                  className={`h-24 p-4 flex justify-between items-start ${
+                    user.isAlumni
+                      ? 'bg-gradient-to-r from-[#1E1B4B] via-[#312E81] to-[#C59B27]'
+                      : 'bg-gradient-to-r from-[#002875] via-[#0039A6] to-[#0077CC]'
+                  }`}
+                >
+                  <button
+                    onClick={handleToggleAlumniStatus}
+                    className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white text-xs font-extrabold px-3 py-1 rounded-full flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <GraduationCap className="w-3.5 h-3.5 text-amber-300" />
+                    {user.isAlumni ? 'Verified Perimeter Alumni' : 'Switch to Alumni Status'}
+                  </button>
                   <span className="bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
-                    Class of {user.gradYear} • {user.campus} Campus
+                    {user.isAlumni ? user.alumniDetails.gradClass : `Class of ${user.gradYear} • ${user.campus} Campus`}
                   </span>
                 </div>
                 <div className="px-6 pb-6">
                   <div className="-mt-10 flex flex-wrap items-end justify-between gap-4">
                     <div className="flex items-end gap-4">
-                      <div className="w-20 h-20 rounded-2xl bg-[#0039A6] text-white font-extrabold text-2xl flex items-center justify-center border-4 border-white shadow-md">
+                      <div
+                        className={`w-20 h-20 rounded-2xl text-white font-extrabold text-2xl flex items-center justify-center border-4 border-white shadow-md ${
+                          user.isAlumni ? 'bg-[#1E1B4B]' : 'bg-[#0039A6]'
+                        }`}
+                      >
                         {user.avatar}
                       </div>
                       <div className="pb-1">
-                        <h2 className="text-xl font-extrabold text-slate-900">{user.name}</h2>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h2 className="text-xl font-extrabold text-slate-900">{user.name}</h2>
+                          {user.isAlumni && (
+                            <span className="inline-flex items-center gap-1 text-xs font-extrabold bg-indigo-950 text-amber-300 px-2.5 py-0.5 rounded-full">
+                              <GraduationCap className="w-3.5 h-3.5" /> Perimeter Alumni
+                            </span>
+                          )}
+                        </div>
                         <p className="text-xs font-semibold text-[#0077CC]">{user.major}</p>
                       </div>
                     </div>
@@ -1900,6 +2263,142 @@ export default function App() {
                   </div>
 
                   <p className="text-sm text-slate-600 mt-4">{user.bio}</p>
+
+                  {/* CLICKABLE INTEREST BUBBLES SECTION */}
+                  <div className="mt-5 pt-4 border-t border-slate-100">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                        <Sparkles className="w-4 h-4 text-[#0039A6]" /> Academic & Club Interests (Click to Toggle)
+                      </h3>
+                      {!isAddingInterest ? (
+                        <button
+                          onClick={() => setIsAddingInterest(true)}
+                          className="text-xs font-bold text-[#0039A6] hover:underline flex items-center gap-1 cursor-pointer bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full transition-colors"
+                        >
+                          <Plus className="w-3.5 h-3.5" /> Add Interest
+                        </button>
+                      ) : (
+                        <form onSubmit={handleAddUserInterest} className="flex items-center gap-1.5">
+                          <input
+                            type="text"
+                            value={newInterestInput}
+                            onChange={(e) => setNewInterestInput(e.target.value)}
+                            placeholder="e.g. Robotics, Nursing..."
+                            className="bg-slate-100 border border-slate-300 rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:border-[#0039A6]"
+                            autoFocus
+                          />
+                          <button
+                            type="submit"
+                            className="bg-[#0039A6] text-white text-xs font-bold px-3 py-1 rounded-lg cursor-pointer hover:bg-[#002D85] shadow-xs"
+                          >
+                            Save
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setIsAddingInterest(false)}
+                            className="text-slate-400 hover:text-slate-600 text-xs px-1.5 font-bold"
+                          >
+                            ✕
+                          </button>
+                        </form>
+                      )}
+                    </div>
+
+                    <div className="flex flex-wrap gap-2.5">
+                      {['Engineering', 'Chemistry', 'Tech', 'Innovation', 'Clubs', 'Transfer Prep', 'Hackathons', 'Pre-Med / PA', 'MESA'].map((defaultTag, idx) => {
+                        const isSelected = user.interests.includes(defaultTag);
+                        // Assign pleasant pastel & gradient themes based on index for a gorgeous aesthetic
+                        const gradients = [
+                          'from-blue-600 to-indigo-600 shadow-blue-500/25',
+                          'from-emerald-600 to-teal-600 shadow-emerald-500/25',
+                          'from-amber-500 to-orange-600 shadow-amber-500/25',
+                          'from-purple-600 to-pink-600 shadow-purple-500/25',
+                          'from-cyan-600 to-blue-600 shadow-cyan-500/25',
+                          'from-rose-600 to-red-600 shadow-rose-500/25',
+                          'from-violet-600 to-indigo-700 shadow-violet-500/25',
+                          'from-sky-600 to-blue-700 shadow-sky-500/25',
+                          'from-emerald-700 to-green-600 shadow-emerald-500/25'
+                        ];
+                        const activeGradient = gradients[idx % gradients.length];
+
+                        return (
+                          <button
+                            key={defaultTag}
+                            onClick={() => handleToggleUserInterest(defaultTag)}
+                            className={`px-3.5 py-2 rounded-2xl text-xs font-extrabold transition-all duration-200 cursor-pointer flex items-center gap-1.5 border transform hover:-translate-y-0.5 active:translate-y-0 ${
+                              isSelected
+                                ? `bg-gradient-to-r ${activeGradient} text-white shadow-md scale-105 border-transparent ring-2 ring-white/50`
+                                : 'bg-slate-100 hover:bg-slate-200/80 text-slate-700 border-slate-200 shadow-2xs'
+                            }`}
+                          >
+                            <span className={isSelected ? 'text-amber-300' : 'text-[#0039A6]'}>#</span>
+                            <span>{defaultTag}</span>
+                            {isSelected ? (
+                              <div className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center ml-0.5">
+                                <Check className="w-3 h-3 text-amber-300" />
+                              </div>
+                            ) : (
+                              <div className="w-4 h-4 rounded-full bg-slate-200/80 flex items-center justify-center ml-0.5 opacity-60">
+                                <Plus className="w-2.5 h-2.5 text-slate-500" />
+                              </div>
+                            )}
+                          </button>
+                        );
+                      })}
+                      {user.interests
+                        .filter((i) => !['Engineering', 'Chemistry', 'Tech', 'Innovation', 'Clubs', 'Transfer Prep', 'Hackathons', 'Pre-Med / PA', 'MESA'].includes(i))
+                        .map((customTag) => (
+                          <button
+                            key={customTag}
+                            onClick={() => handleToggleUserInterest(customTag)}
+                            className="px-3.5 py-2 rounded-2xl text-xs font-extrabold bg-gradient-to-r from-[#0039A6] to-[#0077CC] text-white shadow-md shadow-blue-500/25 flex items-center gap-1.5 border border-transparent ring-2 ring-white/50 cursor-pointer transform hover:-translate-y-0.5 transition-all"
+                          >
+                            <span className="text-amber-300">#</span>
+                            <span>{customTag}</span>
+                            <div className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center ml-0.5">
+                              <Check className="w-3 h-3 text-amber-300" />
+                            </div>
+                          </button>
+                        ))}
+                    </div>
+                  </div>
+
+                  {user.isAlumni && (
+                    <div className="mt-4 p-4 rounded-2xl bg-indigo-50/80 border border-indigo-200/80 grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
+                      <div>
+                        <span className="font-extrabold uppercase tracking-wider text-[10px] text-indigo-900 block">
+                          Years Attended Perimeter
+                        </span>
+                        <span className="font-bold text-slate-800">
+                          {user.alumniDetails.yearsAttended} ({user.campus} Campus)
+                        </span>
+                      </div>
+                      <div>
+                        <span className="font-extrabold uppercase tracking-wider text-[10px] text-indigo-900 block">
+                          Perimeter Pathway (Attended)
+                        </span>
+                        <span className="font-bold text-slate-800">
+                          {user.alumniDetails.perimeterPathway}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="font-extrabold uppercase tracking-wider text-[10px] text-indigo-900 block">
+                          Post-Perimeter Pathway
+                        </span>
+                        <span className="font-bold text-slate-800">
+                          {user.alumniDetails.transferredTo}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="font-extrabold uppercase tracking-wider text-[10px] text-indigo-900 block">
+                          Current Career / Role
+                        </span>
+                        <span className="font-bold text-slate-800">
+                          {user.alumniDetails.currentRole}
+                        </span>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Earned Badges */}
                   <div className="mt-5 pt-4 border-t border-slate-100">
@@ -1967,8 +2466,13 @@ export default function App() {
                           {student.avatar}
                         </div>
                         <div>
-                          <div className="font-bold text-sm text-slate-900 flex items-center gap-1.5">
+                          <div className="font-bold text-sm text-slate-900 flex items-center gap-1.5 flex-wrap">
                             <span>{student.name}</span>
+                            {student.isAlumni && (
+                              <span className="inline-flex items-center gap-1 text-[10px] font-extrabold bg-indigo-950 text-amber-300 px-2 py-0.5 rounded-full">
+                                <GraduationCap className="w-2.5 h-2.5" /> Perimeter Alumni
+                              </span>
+                            )}
                             <span className="text-[10px] font-bold bg-white border border-slate-200 text-[#0039A6] px-2 py-0.5 rounded-full">
                               {student.campus}
                             </span>
