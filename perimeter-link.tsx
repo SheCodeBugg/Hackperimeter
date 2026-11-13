@@ -1331,7 +1331,7 @@ export default function App() {
           <nav className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-2 space-y-1">
             {[
               { id: 'feed', label: 'Campus Feed', icon: Home, desc: 'Photos, Swaps & Alumni Spotlights' },
-              { id: 'buddies', label: 'Buddies & Alumni', icon: Users, desc: 'Classmates & Alumni Mentors' },
+              { id: 'buddies', label: 'Buddies', icon: Users, desc: 'Classmates & Alumni Mentors' },
               { id: 'opportunities', label: 'Opportunities', icon: Briefcase, desc: 'Internships, REUs & Jobs' },
               { id: 'ask', label: 'Ask Perimeter', icon: HelpCircle, desc: 'Profs, Classes & Transfer Q&A' },
               { id: 'hub', label: 'Panther Hub', icon: Trophy, desc: 'Profile, Points & Badges' }
