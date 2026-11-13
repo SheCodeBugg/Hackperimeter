@@ -6,7 +6,7 @@ import { resolve } from 'path';
 // base './' keeps asset links relative so the site works at
 // https://shecodebugg.github.io/Hackperimeter/ (GitHub Pages)
 // Each version of the app gets its own page:
-//   /            -> perimeter-link-ting.tsx (main link)
+//   /            -> switcher: Ting + Study Buddy versions on one link
 //   /ting/       -> perimeter-link-ting.tsx
 //   /v2/         -> perimeter_link_gsu_perimeter_college_student_hub (1).tsx
 export default defineConfig({
