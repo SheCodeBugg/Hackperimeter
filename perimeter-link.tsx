@@ -2508,7 +2508,7 @@ export default function App() {
                   <div>
                     <h3 className="text-lg font-extrabold text-slate-900">Interests</h3>
                     <p className="text-xs text-slate-500 mt-0.5">
-                      Following {user.interests.length} · shown to classmates and alumni mentors
+                      {user.interests.length} interests · shown to classmates and alumni mentors
                     </p>
                   </div>
                   {!isAddingInterest ? (
@@ -2595,7 +2595,7 @@ export default function App() {
                                       : 'border-[#0039A6] text-[#0039A6] hover:bg-blue-50'
                                   }`}
                                 >
-                                  {following ? (<><Check className="w-3.5 h-3.5" /> Following</>) : (<><Plus className="w-3.5 h-3.5" /> Follow</>)}
+                                  {following ? (<><Check className="w-3.5 h-3.5" /> Added</>) : (<><Plus className="w-3.5 h-3.5" /> Add</>)}
                                 </button>
                               </div>
                             </div>
