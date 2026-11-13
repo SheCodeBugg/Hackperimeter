@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 import {
   Home,
   Briefcase,
@@ -541,6 +542,7 @@ export default function App() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [createType, setCreateType] = useState('feed'); // 'feed' | 'ask' | 'opp'
   const [isPointsModalOpen, setIsPointsModalOpen] = useState(false);
+  const [isQrOpen, setIsQrOpen] = useState(false);
 
   // New Interest addition state
   const [newInterestInput, setNewInterestInput] = useState('');
@@ -624,6 +626,9 @@ export default function App() {
       return matchesCampus && matchesRole && matchesMajor && matchesInterest && matchesCourse && matchesGlobalSearch;
     });
   }, [studyBuddies, selectedCampus, buddyRoleFilter, selectedMajorFilter, selectedInterestFilter, courseFilter, searchQuery]);
+
+  // Link encoded in the profile QR code
+  const profileUrl = `https://shecodebugg.github.io/Hackperimeter/?profile=${(user.handle || '').replace(/^@/, '')}`;
 
   // Engagement Rank: counts real activity in the app plus earlier history
   const engagement = useMemo(() => {
@@ -2311,7 +2316,7 @@ export default function App() {
               {/* Student / Alumni Profile Overview Card */}
               <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
                 <div
-                  className={`h-24 p-4 flex justify-between items-start ${
+                  className={`min-h-24 p-4 flex justify-between items-start gap-3 ${
                     user.isAlumni
                       ? 'bg-gradient-to-r from-[#1E1B4B] via-[#312E81] to-[#C59B27]'
                       : 'bg-gradient-to-r from-[#002875] via-[#0039A6] to-[#0077CC]'
@@ -2324,9 +2329,21 @@ export default function App() {
                     <GraduationCap className="w-3.5 h-3.5 text-amber-300" />
                     {user.isAlumni ? 'Verified Perimeter Alumni' : 'Switch to Alumni Status'}
                   </button>
-                  <span className="bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
-                    {user.isAlumni ? user.alumniDetails.gradClass : `Class of ${user.gradYear} • ${user.campus} Campus`}
-                  </span>
+                  <div className="flex items-start gap-2">
+                    <span className="bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
+                      {user.isAlumni ? user.alumniDetails.gradClass : `Class of ${user.gradYear} • ${user.campus} Campus`}
+                    </span>
+                    {/* Profile QR code: tap to enlarge so someone can scan it */}
+                    <button
+                      onClick={() => setIsQrOpen(true)}
+                      aria-label="Show my profile QR code"
+                      title="Scan to connect"
+                      className="shrink-0 bg-white rounded-xl p-1.5 shadow-md hover:scale-105 transition-transform cursor-pointer flex flex-col items-center"
+                    >
+                      <QRCodeSVG value={profileUrl} size={52} fgColor="#002875" level="M" />
+                      <span className="text-[8px] font-extrabold uppercase tracking-wide text-[#0039A6] mt-0.5">Scan me</span>
+                    </button>
+                  </div>
                 </div>
                 <div className="px-6 pb-6">
                   <div className="-mt-10 flex flex-wrap items-end justify-between gap-4">
@@ -3011,6 +3028,38 @@ export default function App() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Profile QR code (enlarged) */}
+      {isQrOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4"
+          onClick={() => setIsQrOpen(false)}
+        >
+          <div
+            className="bg-white rounded-3xl max-w-xs w-full shadow-2xl border border-slate-200 p-6 text-center"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Profile QR code"
+          >
+            <div className="flex justify-end -mt-2 -mr-2">
+              <button onClick={() => setIsQrOpen(false)} aria-label="Close" className="p-1.5 rounded-full hover:bg-slate-100 cursor-pointer">
+                <X className="w-5 h-5 text-slate-500" />
+              </button>
+            </div>
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-[#0039A6] text-white font-extrabold text-lg flex items-center justify-center">
+              {user.avatar}
+            </div>
+            <h3 className="font-extrabold text-lg text-slate-900 mt-2">{user.name}</h3>
+            <p className="text-xs text-slate-500">{user.major} · {user.campus}</p>
+            <div className="mt-4 inline-block p-3 rounded-2xl border-2 border-[#0039A6]/20">
+              <QRCodeSVG value={profileUrl} size={200} fgColor="#002875" level="M" />
+            </div>
+            <p className="text-sm font-bold text-[#0039A6] mt-3">Scan to connect on Perimeter Link</p>
+            <p className="text-[11px] text-slate-400 mt-1 break-all">{profileUrl}</p>
           </div>
         </div>
       )}
