@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crew: Perimeter Student Network</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F8FF;--card:#FFFFFF;--blue:#1D4ED8;--blue2:#1E3A8A;--sky:#DBE7FF;--line:#C7D7F7;--soft:#E2E8F5;--ink:#0B1B3F;--mute:#475569;--ok:#166534;--okbg:#DCFCE7;--warn:#92400E;--warnbg:#FEF3C7;--err:#B91C1C}
+*{box-sizing:border-box}
+html,body{margin:0;background:#E9EFFC;color:var(--ink);font-family:Inter,system-ui,sans-serif}
+button,input,textarea,select{font:inherit;color:inherit}
+.app{max-width:460px;margin:0 auto;min-height:100vh;background:var(--bg);padding-bottom:84px;position:relative}
+.h{font-family:"Space Grotesk",sans-serif;font-weight:700}
+.top{background:#fff;padding:20px 18px 14px;border-bottom:1px solid var(--soft);position:sticky;top:0;z-index:5}
+.brand{color:var(--blue);font-size:22px;letter-spacing:1px}
+.title{font-size:26px;margin:0}
+.sub{color:var(--mute);font-size:14px;margin:4px 0 0}
+.wrap{padding:16px;display:flex;flex-direction:column;gap:14px}
+.card{background:var(--card);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.card.blue{background:var(--blue);color:#fff}
+.card.outline{border:2px solid var(--blue)}
+.row{display:flex;gap:12px;align-items:center}
+.between{justify-content:space-between}
+.grow{flex:1;min-width:0}
+.col{display:flex;flex-direction:column;gap:2px}
+.av{width:44px;height:44px;border-radius:13px;background:var(--sky);color:var(--blue);font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;font-size:14px}
+.av.lg{width:64px;height:64px;border-radius:18px;font-size:22px}
+.av.dark{background:var(--blue);color:#fff}
+.name{font-weight:600;font-size:15px}
+.meta{color:var(--mute);font-size:13px}
+.card.blue .meta{color:var(--sky)}
+.accent{color:var(--blue);font-weight:600;font-size:13px}
+.kick{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--mute);text-transform:uppercase}
+.kick.b{color:var(--blue)}
+.btn{height:44px;padding:0 16px;border-radius:12px;border:none;background:var(--blue);color:#fff;font-weight:600;font-size:14px;cursor:pointer;white-space:nowrap}
+.btn.line{background:#fff;border:1.5px solid var(--blue);color:var(--blue)}
+.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.btn.white{background:#fff;color:var(--blue)}
+.btn.ok{background:var(--okbg);color:var(--ok)}
+.btn.full{width:100%}
+.btn:disabled{opacity:.6;cursor:default}
+.btn:active:not(:disabled){transform:scale(.97)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+.chip{white-space:nowrap;border:1px solid var(--line);background:var(--bg);padding:7px 12px;border-radius:99px;font-size:13px;cursor:pointer}
+.chip.on{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
+.pill{background:var(--sky);color:var(--blue2);font-size:12px;font-weight:600;padding:5px 10px;border-radius:99px}
+.pill.o{background:#fff;border:1px solid var(--line);color:var(--ink);font-weight:500}
+.badge{font-size:11px;font-weight:700;padding:4px 8px;border-radius:6px}
+.badge.ok{background:var(--okbg);color:var(--ok)}
+.badge.warn{background:var(--warnbg);color:var(--warn)}
+.badge.b{background:var(--sky);color:var(--blue2)}
+.wraprow{display:flex;flex-wrap:wrap;gap:8px}
+input,textarea,select{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 12px;outline:none;font-size:15px}
+input:focus,textarea:focus,select:focus{border-color:var(--blue)}
+textarea{min-height:76px;resize:vertical}
+label.f{font-size:13px;font-weight:600;display:flex;flex-direction:column;gap:6px}
+.err{color:var(--err);font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.stat{background:var(--bg);border-radius:12px;padding:10px;text-align:center}
+.stat b{display:block;font-family:"Space Grotesk";font-size:20px}
+.stat span{font-size:12px;color:var(--mute)}
+.ans{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.ans.best{border-color:var(--blue)}
+.vote{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font-size:13px;cursor:pointer;color:var(--mute);font-weight:600}
+.vote.on{border-color:var(--blue);color:var(--blue)}
+.link{background:none;border:none;color:var(--blue);font-weight:600;font-size:14px;padding:0;cursor:pointer;text-align:left}
+.stars{color:var(--blue);letter-spacing:2px}
+.starpick{display:flex;gap:6px}
+.starpick button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:20px;color:#9CB3E8;cursor:pointer}
+.starpick button.on{color:var(--blue);border-color:var(--blue)}
+.pollopt{position:relative;height:42px;border-radius:10px;background:var(--bg);overflow:hidden;display:flex;align-items:center;border:1px solid var(--soft);cursor:pointer;width:100%;padding:0;text-align:left}
+.pollopt i{position:absolute;left:0;top:0;bottom:0;background:var(--sky);transition:width .4s}
+.pollopt span{position:relative;padding:0 12px;font-size:14px}
+.pollopt .pct{margin-left:auto;font-weight:600;font-size:13px}
+.pollopt.mine{border-color:var(--blue)}
+.stories{display:flex;gap:14px;overflow-x:auto;padding-top:12px}
+.story{display:flex;flex-direction:column;align-items:center;gap:6px;width:64px;flex:none;background:none;border:none;cursor:pointer;padding:0}
+.story .ring{width:60px;height:60px;border-radius:99px;border:3px solid var(--blue);background:var(--sky);color:var(--blue);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+.story span{font-size:11px;text-align:center}
+.resume{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;font-size:13px;line-height:1.55}
+.resume h4{margin:12px 0 4px;font-size:12px;letter-spacing:1px;color:var(--blue);text-transform:uppercase}
+.resume ul{margin:0;padding-left:18px}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:center;z-index:8;pointer-events:none}
+nav .in{max-width:460px;width:100%;background:#fff;border-top:1px solid var(--soft);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));pointer-events:auto}
+nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:68px;color:var(--mute);text-decoration:none;font-size:11px;font-weight:600}
+nav a.on{color:var(--blue)}
+nav svg{width:22px;height:22px}
+.toast{position:fixed;left:50%;bottom:92px;transform:translate(-50%,16px);background:var(--ink);color:#fff;padding:11px 16px;border-radius:12px;font-size:14px;font-weight:600;opacity:0;transition:.25s;z-index:20;pointer-events:none;max-width:88%;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.overlay{position:fixed;inset:0;background:rgba(11,27,63,.55);z-index:15;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--bg);width:100%;max-width:460px;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:18px 16px 28px;display:flex;flex-direction:column;gap:14px}
+.arena{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center}
+.fighter{background:#fff;border-radius:14px;padding:12px;text-align:center}
+.fighter.me{border:2px solid var(--blue)}
+.fighter b{display:block;font-family:"Space Grotesk";font-size:30px}
+.timer{height:6px;background:var(--soft);border-radius:9px;overflow:hidden}
+.timer i{display:block;height:100%;background:var(--blue)}
+.opt{text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px;font-size:15px;cursor:pointer;width:100%}
+.opt.right{border-color:#16A34A;background:var(--okbg)}
+.opt.wrong{border-color:var(--err);background:#FEE2E2}
+.hidden{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<div class="app">
+  <main id="view"></main>
+</div>
+<nav><div class="in" id="nav"></div></nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div id="modal"></div>
+
+<script>
+/* ================= DATA ================= */
+const SEED = {
+  me:{name:"Jordan Ellis",initials:"JE",major:"Computer Science",year:"2nd year",goal:"Georgia State",
+      classes:["CSC 1301","MATH 2211","ENGL 1102","PHYS 2211"],skills:["Python","Arduino","Spanish","Tutoring"],resumeFile:null},
+  xp:120,
+  people:[
+    {id:1,name:"Priya S.",major:"Computer Science",classes:["CSC 1301","MATH 2211"],free:"Free until 2 PM · Library",note:"Free Tue 2–4 PM, like you",ahead:null,status:"none"},
+    {id:2,name:"Diego R.",major:"Computer Science",classes:[],free:null,note:"Transferred to GSU · summer internship",ahead:"Transferred Perimeter → GSU CS last year",status:"none"},
+    {id:3,name:"Lena T.",major:"Computer Science",classes:["CSC 1301"],free:"Free until 2 PM · Library",note:"Looking for a hackathon team",ahead:null,status:"none"},
+    {id:4,name:"Marcus T.",major:"Computer Science",classes:["CSC 1301","ENGL 1102"],free:"Free until 2 PM · Library",note:"Coding Club member",ahead:null,status:"none"},
+    {id:5,name:"Amara K.",major:"Biology",classes:["MATH 2211"],free:null,note:"Pre-nursing · loves calculus",ahead:"Got an A in MATH 2211 last term",status:"none"},
+    {id:6,name:"Sam O.",major:"Computer Science",classes:["PHYS 2211"],free:null,note:"Robotics & Maker Lab",ahead:"Passed PHYS 2211 last spring",status:"none"}
+  ],
+  events:[
+    {id:1,title:"Transfer to GSU: Q&A Panel",when:"Thu 12:00 PM",where:"CN Building",going:35,major:12,joined:false},
+    {id:2,title:"Calc I Finals Study Jam",when:"Mon 2:00 PM",where:"Library, 3rd floor",going:18,major:6,joined:false},
+    {id:3,title:"International Food Night",when:"Wed 5:30 PM",where:"Student Center",going:62,major:9,joined:false}
+  ],
+  clubs:[
+    {id:1,name:"Robotics & Maker Lab",short:"RM",desc:"Open build night Thursday",members:31,joined:false},
+    {id:2,name:"Coding Club",short:"CC",desc:"Weekly hack nights + LeetCode",members:48,joined:false},
+    {id:3,name:"International Students Assoc.",short:"ISA",desc:"Culture nights & language swaps",members:87,joined:false}
+  ],
+  posts:[
+    {id:1,author:"Amara K.",course:"MATH 2211",subject:"Calculus",title:"Derivative of x² · sin(x)?",body:"I keep getting 2x · cos(x). What am I missing?",time:"12 min ago",
+     comments:[{id:1,author:"You",text:"Use the product rule: 2x · sin(x) + x² · cos(x). You differentiated both parts at once.",votes:7,voted:false,best:true},
+               {id:2,author:"Lena T.",text:"Memory trick: first · d(second) + second · d(first).",votes:3,voted:false,best:false}]},
+    {id:2,author:"Marcus T.",course:"CSC 1301",subject:"Programming",title:"Why does my Python loop never stop?",body:"My while loop keeps printing the same number forever.",time:"35 min ago",comments:[]},
+    {id:3,author:"Sam O.",course:"ENGL 1102",subject:"English",title:"Can a thesis be a question?",body:"My professor said my thesis is weak. It's phrased as a question.",time:"1 hr ago",
+     comments:[{id:1,author:"Priya S.",text:"Turn it into a claim you can argue. The question can be your hook instead.",votes:4,voted:false,best:false}]}
+  ],
+  profs:[
+    {id:1,name:"Prof. Nova Hale",course:"MATH 2211 · Calculus I",tags:["Clear lectures","Helpful office hours","Weekly quizzes"],
+     reviews:[{stars:5,diff:3,again:true,text:"Explains every step on the board. Go to office hours before the exam.",term:"Fall 2026",helpful:24,voted:false},
+              {stars:4,diff:4,again:true,text:"Quizzes every Friday keep you on track. Start homework early.",term:"Spring 2026",helpful:11,voted:false}]},
+    {id:2,name:"Prof. Orion Vale",course:"CSC 1301 · Intro to CS",tags:["Project-based","Fair grader"],
+     reviews:[{stars:5,diff:2,again:true,text:"Projects are fun and actually useful for a portfolio.",term:"Fall 2026",helpful:15,voted:false},
+              {stars:4,diff:3,again:true,text:"Read the lab instructions twice. Very responsive by email.",term:"Spring 2026",helpful:6,voted:false}]},
+    {id:3,name:"Prof. Lyra Stone",course:"PHYS 2211 · Physics I",tags:["Tough exams","Great demos"],
+     reviews:[{stars:3,diff:5,again:false,text:"Hard exams, but the demos make concepts click. Form a study group.",term:"Fall 2026",helpful:19,voted:false}]}
+  ],
+  poll:{q:"Best study spot on campus?",opts:[{t:"Library 3rd floor",v:116},{t:"STEM Lab",v:60},{t:"Student Center",v:38}],mine:null},
+  battles:{played:2,won:1},
+  joinedFree:false,
+  battleInvite:true
+};
+
+let S;
+try{ S=JSON.parse(localStorage.getItem("crew2"))||null; }catch(e){ S=null; }
+if(!S) S=JSON.parse(JSON.stringify(SEED));
+function save(){ try{ localStorage.setItem("crew2",JSON.stringify(S)); }catch(e){} }
+
+/* ================= HELPERS ================= */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ini=n=>n.split(/\s+/).map(p=>p[0]).join("").replace(/[^A-Za-z]/g,"").slice(0,2).toUpperCase();
+const av=(n,cls="")=>`<div class="av ${cls}" aria-hidden="true">${esc(n==="You"?S.me.initials:ini(n))}</div>`;
+const stars=n=>"★★★★★".slice(0,Math.round(n))+"☆☆☆☆☆".slice(0,5-Math.round(n));
+function toast(t){const el=$("toast");el.textContent=t;el.classList.add("show");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove("show"),2200);}
+function xp(n,why){S.xp+=n;save();toast(`${why}  +${n} XP`);}
+const connCount=()=>S.people.filter(p=>p.status==="connected").length;
+function myHelp(){
+  const by={};let answers=0,best=0;
+  S.posts.forEach(p=>p.comments.forEach(c=>{ if(c.author==="You"){answers++; if(c.best)best++; by[p.subject]=(by[p.subject]||0)+1;} }));
+  return {by,answers,best};
+}
+function profAvg(p){const r=p.reviews,n=r.length||1;
+  return {stars:r.reduce((a,x)=>a+x.stars,0)/n,diff:r.reduce((a,x)=>a+x.diff,0)/n,again:Math.round(r.filter(x=>x.again).length/n*100),n:r.length};}
+
+const ICON={
+  home:'<path d="M3 10.5 12 3l9 7.5V21H3z"/>',
+  people:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/>',
+  help:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  profs:'<polygon points="12 2 15.1 8.3 22 9.3 17 14.1 18.2 21 12 17.8 5.8 21 7 14.1 2 9.3 8.9 8.3 12 2"/>',
+  me:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  pin:'<path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+  file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
+  plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+  back:'<polyline points="15 18 9 12 15 6"/>'
+};
+const ic=(k,size=22,color="currentColor")=>`<svg aria-hidden="true" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICON[k]}</svg>`;
+
+/* ================= VIEWS ================= */
+let ui={peopleFilter:"major",helpFilter:"mine",showAsk:false,open:{1:true},profId:null,profQ:"",reviewOpen:false,reviewStars:0,resumeOpen:false};
+
+function vHome(){
+  const free=S.people.filter(p=>p.free&&p.classes.some(c=>S.me.classes.includes(c)));
+  const ev=S.events.find(e=>!e.joined)||S.events[0];
+  const q=S.posts.find(p=>S.me.classes.includes(p.course)&&!p.comments.some(c=>c.author==="You"));
+  const club=S.clubs.find(c=>!c.joined);
+  const total=S.poll.opts.reduce((a,o)=>a+o.v,0);
+  const prof=S.profs[0], rv=prof.reviews[0];
+  const diego=S.people.find(p=>p.id===2);
+  return `
+  <div class="top">
+    <div class="row between"><span class="h brand">CREW</span><span class="pill">${S.xp} XP</span></div>
+    <div class="stories" aria-label="Live now">
+      <button class="story" data-a="go" data-v="people"><div class="ring">LIVE</div><span>Study jam</span></button>
+      ${S.clubs.map(c=>`<button class="story" data-a="joinClub" data-id="${c.id}"><div class="ring" style="${c.joined?"":"border-color:var(--line)"}">${esc(c.short)}</div><span>${esc(c.name.split(" ")[0])}</span></button>`).join("")}
+      <button class="story" data-a="go" data-v="people"><div class="ring">PS</div><span>Priya S.</span></button>
+    </div>
+  </div>
+  <div class="wrap">
+    ${free.length?`
+    <div class="card blue">
+      <div class="row">${ic("pin",28,"#fff")}
+        <div class="grow col"><span class="name">${free.length} classmates are free right now</span><span class="meta">${esc(free[0].free.split("·")[1]||"Library")} · ${esc(free.map(p=>p.name.split(" ")[0]).join(", "))}</span></div>
+        <button class="btn ${S.joinedFree?"ok":"white"}" data-a="joinFree" ${S.joinedFree?"disabled":""}>${S.joinedFree?"Joined ✓":"Join"}</button>
+      </div>
+    </div>`:""}
+
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="height:110px;background:var(--sky);display:flex;align-items:flex-end;padding:14px"><span class="badge" style="background:#fff;color:var(--blue)">EVENT · ${esc(ev.when.split(" ")[0].toUpperCase())}</span></div>
+      <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px">
+        <span class="h" style="font-size:18px">${esc(ev.title)}</span>
+        <span class="meta">${esc(ev.when)} · ${esc(ev.where)}</span>
+        <div class="row between"><span class="name" style="font-size:13px">${ev.major} from your major going</span>
+        <button class="btn ${ev.joined?"ok":""}" data-a="rsvp" data-id="${ev.id}">${ev.joined?"Going ✓":"RSVP"}</button></div>
+      </div>
+    </div>
+
+    ${S.battleInvite?`
+    <div class="card outline">
+      <span class="kick b">Flashcard battle</span>
+      <div class="arena" style="grid-template-columns:1fr auto 1fr">
+        <div class="col" style="align-items:center">${av("Priya S.")}<span class="name" style="font-size:13px">Priya</span></div>
+        <span class="h" style="font-size:26px;color:var(--blue)">VS</span>
+        <div class="col" style="align-items:center">${av("You","dark")}<span class="name" style="font-size:13px">You</span></div>
+      </div>
+      <span style="text-align:center;font-size:14px">Priya challenged you to <b>Calculus I</b> · 5 rounds</span>
+      <div class="row"><button class="btn grow" data-a="battle">Accept</button><button class="btn ghost grow" data-a="later">Later</button></div>
+    </div>`:""}
+
+    ${q?`
+    <div class="card">
+      <div class="row">${av(q.author)}<div class="grow col"><span class="name" style="font-size:14px">${esc(q.author)} needs help</span><span class="meta">${esc(q.course)} · your class</span></div><span class="badge b">+10 XP</span></div>
+      <span class="h" style="font-size:16px">${esc(q.title)}</span>
+      <button class="link" data-a="answerFeed" data-id="${q.id}">Answer this →</button>
+    </div>`:""}
+
+    <div class="card">
+      <span class="kick">Campus poll · ${total} votes</span>
+      <span class="h" style="font-size:16px">${esc(S.poll.q)}</span>
+      ${S.poll.opts.map((o,i)=>{const pct=Math.round(o.v/total*100);return `
+        <button class="pollopt ${S.poll.mine===i?"mine":""}" data-a="poll" data-id="${i}" ${S.poll.mine!==null?"disabled":""}>
+          <i style="width:${S.poll.mine!==null?pct:0}%"></i><span>${esc(o.t)}</span>${S.poll.mine!==null?`<span class="pct">${pct}%</span>`:""}
+        </button>`;}).join("")}
+      ${S.poll.mine===null?'<span class="meta">Tap to vote and see results</span>':""}
+    </div>
+
+    <div class="card"><div class="row">
+      <div class="av" style="width:44px;height:54px;border-radius:8px">${ic("file",22,"#1D4ED8")}</div>
+      <div class="grow col"><span class="name" style="font-size:14px">${esc(diego.name)} shared his resume</span><span class="meta">CS → GSU transfer · one step ahead of you</span></div>
+      <button class="btn line" data-a="connect" data-id="2">${diego.status==="connected"?"Connected ✓":diego.status==="pending"?"Pending":"Connect"}</button>
+    </div></div>
+
+    <div class="card">
+      <div class="row between"><span class="kick">Prof review · ${esc(prof.course.split(" ·")[0])}</span><span class="stars" aria-label="${rv.stars} out of 5 stars">${stars(rv.stars)}</span></div>
+      <span style="font-size:14px;line-height:1.5">“${esc(rv.text)}”</span>
+      <button class="link" data-a="openProf" data-id="${prof.id}">See all reviews →</button>
+    </div>
+
+    ${club?`
+    <div class="card"><div class="row">
+      <div class="av dark" style="width:48px;height:48px">${esc(club.short)}</div>
+      <div class="grow col"><span class="name" style="font-size:14px">${esc(club.name)}</span><span class="meta">${esc(club.desc)} · ${club.members} members</span></div>
+      <button class="btn" data-a="joinClub" data-id="${club.id}">Join</button>
+    </div></div>`:""}
+  </div>`;
+}
+
+function vPeople(){
+  const f=ui.peopleFilter;
+  let list=S.people;
+  if(f==="major") list=list.filter(p=>p.major===S.me.major);
+  if(f==="classes") list=list.filter(p=>p.classes.some(c=>S.me.classes.includes(c)));
+  if(f==="free") list=list.filter(p=>p.free);
+  if(f==="ahead") list=list.filter(p=>p.ahead);
+  const reason=p=>{
+    if(f==="ahead"&&p.ahead) return p.ahead;
+    const shared=p.classes.filter(c=>S.me.classes.includes(c));
+    if(f==="free"&&p.free) return p.free;
+    return shared.length?`Shares ${shared.join(", ")}`:p.note;
+  };
+  return `
+  <div class="top">
+    <h1 class="h title">Find your crew</h1>
+    <p class="sub">${connCount()} connections · students in your major and classes</p>
+    <div class="chips" style="margin-top:12px">
+      ${[["major","Computer Science"],["classes","Same classes"],["free","Free now"],["ahead","One step ahead"]].map(([k,t])=>`<button class="chip ${f===k?"on":""}" data-a="pf" data-id="${k}">${t}</button>`).join("")}
+    </div>
+  </div>
+  <div class="wrap">
+    ${f==="ahead"?`<div class="card blue"><span class="name">One step ahead mentors</span><span class="meta" style="font-size:14px">Students who just finished the class or transfer you're working on. Easier to ask than a professional, and their advice is fresh.</span></div>`:""}
+    ${list.map(p=>`
+      <div class="card"><div class="row">
+        ${av(p.name)}
+        <div class="grow col"><span class="name">${esc(p.name)}</span><span class="meta">${esc(p.major)} · ${esc(p.note)}</span><span class="accent">${esc(reason(p))}</span></div>
+        <button class="btn ${p.status==="connected"?"ok":p.status==="pending"?"line":""}" data-a="connect" data-id="${p.id}" ${p.status!=="none"?"disabled":""}>${p.status==="connected"?"Connected ✓":p.status==="pending"?"Pending":f==="ahead"?"Ask":"Connect"}</button>
+      </div></div>`).join("")||'<p class="meta">Nobody here yet.</p>'}
+    ${f!=="ahead"?`
+    <div class="card blue">
+      <span class="h" style="font-size:17px">Study group forming</span>
+      <span class="meta" style="font-size:14px;line-height:1.5">4 CS students are reviewing for the CSC 1301 final in the library, 3rd floor, today at 3 PM.</span>
+      <button class="btn white" data-a="rsvp" data-id="2">${S.events[1].joined?"Joined ✓":"Join group"}</button>
+    </div>`:""}
+  </div>`;
+}
+
+function vHelp(){
+  const f=ui.helpFilter;
+  let list=S.posts;
+  if(f==="mine") list=list.filter(p=>S.me.classes.includes(p.course)||p.author==="You");
+  if(f==="open") list=list.filter(p=>!p.comments.some(c=>c.best));
+  const courses=[...new Set([...S.me.classes,"BIOL 1107","CHEM 1211","HIST 2111"])];
+  return `
+  <div class="top">
+    <div class="row between"><h1 class="h title">Homework help</h1>
+      <button class="btn" style="width:44px;padding:0" aria-label="Post a question" data-a="toggleAsk">${ic(ui.showAsk?"back":"plus",20,"#fff")}</button></div>
+    <div class="chips" style="margin-top:12px">
+      ${[["mine","My classes"],["open","Unsolved"],["all","All"]].map(([k,t])=>`<button class="chip ${f===k?"on":""}" data-a="hf" data-id="${k}">${t}</button>`).join("")}
+    </div>
+  </div>
+  <div class="wrap">
+    ${ui.showAsk?`
+    <form class="card" data-form="ask" novalidate>
+      <span class="h" style="font-size:17px">Ask your classmates</span>
+      <label class="f">Course<select name="course">${courses.map(c=>`<option>${c}</option>`).join("")}</select></label>
+      <label class="f">Question<input name="title" placeholder="e.g. How do I factor x² − 9?"></label>
+      <label class="f">What have you tried?<textarea name="body" placeholder="Show your work so people can help faster"></textarea></label>
+      <div class="err" id="askErr"></div>
+      <button class="btn full" type="submit">Post question</button>
+    </form>`:""}
+    ${list.map(p=>{
+      const solved=p.comments.some(c=>c.best);
+      const sorted=[...p.comments].sort((a,b)=>(b.best-a.best)||(b.votes-a.votes));
+      const open=ui.open[p.id];
+      return `
+      <div class="card">
+        <div class="row">${av(p.author)}<div class="grow col"><span class="name" style="font-size:14px">${esc(p.author)}</span><span class="meta">${esc(p.course)} · ${esc(p.time)}</span></div>
+          <span class="badge ${solved?"ok":"warn"}">${solved?"SOLVED":"OPEN"}</span></div>
+        <span class="h" style="font-size:17px">${esc(p.title)}</span>
+        <span style="font-size:14px;color:#334155;line-height:1.5">${esc(p.body)}</span>
+        <button class="link" data-a="togglePost" data-id="${p.id}">${open?"Hide answers":`${p.comments.length} answer${p.comments.length===1?"":"s"} · ${solved?"see solution":"help out"}`}</button>
+        ${open?`
+          ${sorted.map(c=>`
+            <div class="ans ${c.best?"best":""}">
+              <div class="row between"><span class="name" style="font-size:13px">${esc(c.author==="You"?S.me.name+" (you)":c.author)}</span>${c.best?'<span class="kick b">Best answer</span>':""}</div>
+              <span style="font-size:14px;line-height:1.5">${esc(c.text)}</span>
+              <div class="row" style="gap:8px">
+                <button class="vote ${c.voted?"on":""}" data-a="vote" data-id="${p.id}" data-c="${c.id}" aria-pressed="${c.voted}">▲ ${c.votes}</button>
+                ${p.author==="You"&&!c.best&&c.author!=="You"?`<button class="vote" data-a="best" data-id="${p.id}" data-c="${c.id}">★ Mark best</button>`:""}
+              </div>
+            </div>`).join("")}
+          <form class="col" style="gap:8px" data-form="answer" data-id="${p.id}" novalidate>
+            <label class="sr" for="ans-${p.id}">Your answer</label>
+            <textarea id="ans-${p.id}" name="text" placeholder="Write an answer… (+10 XP)" style="min-height:60px"></textarea>
+            <div class="err" id="ansErr-${p.id}"></div>
+            <button class="btn line" type="submit">Post answer</button>
+          </form>`:""}
+      </div>`;}).join("")||'<p class="meta">No questions here. Ask the first one!</p>'}
+  </div>`;
+}
+
+function vProfs(){
+  if(ui.profId) return vProfDetail();
+  const q=ui.profQ.toLowerCase();
+  const list=S.profs.filter(p=>(p.name+p.course).toLowerCase().includes(q));
+  return `
+  <div class="top">
+    <h1 class="h title">Rate your professors</h1>
+    <p class="sub">Honest reviews from verified Perimeter students</p>
+    <label class="sr" for="profSearch">Search professors</label>
+    <input id="profSearch" data-in="profQ" placeholder="Search by name or course" value="${esc(ui.profQ)}" style="margin-top:12px">
+  </div>
+  <div class="wrap">
+    ${list.map(p=>{const a=profAvg(p);return `
+      <button class="card" data-a="openProf" data-id="${p.id}" style="border:none;text-align:left;cursor:pointer">
+        <div class="row">
+          <div class="grow col"><span class="h" style="font-size:17px">${esc(p.name)}</span><span class="meta">${esc(p.course)}</span>
+          <span class="meta" style="margin-top:4px">${a.again}% would take again · difficulty ${a.diff.toFixed(1)}</span></div>
+          <div style="background:var(--blue);color:#fff;border-radius:14px;padding:8px 12px;text-align:center"><div class="h" style="font-size:22px;line-height:1">${a.stars.toFixed(1)}</div><div style="font-size:11px">${a.n} review${a.n===1?"":"s"}</div></div>
+        </div>
+      </button>`;}).join("")||`<p class="meta">No professors match "${esc(ui.profQ)}".</p>`}
+    <p class="meta" style="text-align:center">Prototype: professor names and reviews are sample data.</p>
+  </div>`;
+}
+
+function vProfDetail(){
+  const p=S.profs.find(x=>x.id===ui.profId), a=profAvg(p);
+  return `
+  <div class="top">
+    <button class="link" data-a="closeProf" style="display:flex;align-items:center;gap:4px">${ic("back",18)} All professors</button>
+  </div>
+  <div class="wrap">
+    <div class="card blue">
+      <div class="row between">
+        <div class="col"><span class="h" style="font-size:20px">${esc(p.name)}</span><span class="meta" style="font-size:14px">${esc(p.course)}</span></div>
+        <div style="background:#fff;color:var(--blue);border-radius:14px;padding:8px 12px;text-align:center"><div class="h" style="font-size:24px;line-height:1">${a.stars.toFixed(1)}</div><div style="font-size:11px;font-weight:600">/ 5</div></div>
+      </div>
+      <div class="stats">
+        <div class="stat" style="background:rgba(255,255,255,.14)"><b>${a.diff.toFixed(1)}</b><span style="color:var(--sky)">Difficulty</span></div>
+        <div class="stat" style="background:rgba(255,255,255,.14)"><b>${a.again}%</b><span style="color:var(--sky)">Take again</span></div>
+        <div class="stat" style="background:rgba(255,255,255,.14)"><b>${a.n}</b><span style="color:var(--sky)">Reviews</span></div>
+      </div>
+      <div class="wraprow">${p.tags.map(t=>`<span class="pill" style="background:#fff">${esc(t)}</span>`).join("")}</div>
+    </div>
+    ${ui.reviewOpen?`
+    <form class="card" data-form="review" novalidate>
+      <span class="h" style="font-size:17px">Write a review</span>
+      <div class="f" style="font-size:13px;font-weight:600">Overall rating
+        <div class="starpick" role="group" aria-label="Rating">${[1,2,3,4,5].map(n=>`<button type="button" class="${n<=ui.reviewStars?"on":""}" data-a="pickStar" data-id="${n}" aria-label="${n} star${n>1?"s":""}">★</button>`).join("")}</div></div>
+      <label class="f">Difficulty<select name="diff">${[1,2,3,4,5].map(n=>`<option value="${n}" ${n===3?"selected":""}>${n} – ${["Very easy","Easy","Medium","Hard","Very hard"][n-1]}</option>`).join("")}</select></label>
+      <label class="f">Would you take this professor again?<select name="again"><option value="yes">Yes</option><option value="no">No</option></select></label>
+      <label class="f">Your review<textarea name="text" placeholder="Be specific and respectful: what helped, what to prepare for."></textarea></label>
+      <div class="err" id="revErr"></div>
+      <div class="row"><button class="btn grow" type="submit">Post review</button><button class="btn ghost" type="button" data-a="toggleReview">Cancel</button></div>
+    </form>`:`<button class="btn full" style="background:var(--ink)" data-a="toggleReview">Write a review</button>`}
+    <span class="h" style="font-size:16px">Recent reviews</span>
+    ${p.reviews.map((r,i)=>`
+      <div class="card" style="gap:8px">
+        <div class="row between"><span class="stars" aria-label="${r.stars} out of 5 stars">${stars(r.stars)}</span><span class="meta" style="font-size:12px">${r.mine?"You":"Verified student"} · ${esc(r.term)}</span></div>
+        <span style="font-size:14px;line-height:1.5">${esc(r.text)}</span>
+        <div class="row" style="gap:8px"><button class="vote ${r.voted?"on":""}" data-a="helpful" data-id="${i}" aria-pressed="${r.voted}">Helpful · ${r.helpful}</button>
+        <span class="meta" style="font-size:12px">Difficulty ${r.diff}/5 · ${r.again?"Would take again":"Wouldn't take again"}</span></div>
+      </div>`).join("")}
+  </div>`;
+}
+
+function vMe(){
+  const h=myHelp(), clubs=S.clubs.filter(c=>c.joined), evs=S.events.filter(e=>e.joined);
+  return `
+  <div style="background:var(--blue);padding:22px 18px 64px" class="row between">
+    <span class="h" style="font-size:22px;color:#fff;letter-spacing:1px">CREW</span><span class="pill">${S.xp} XP</span>
+  </div>
+  <div class="wrap" style="margin-top:-56px">
+    <div class="card" style="box-shadow:0 8px 24px rgba(11,27,63,.08)">
+      <div class="row">${`<div class="av lg">${esc(S.me.initials)}</div>`}
+        <div class="col"><span class="h" style="font-size:20px">${esc(S.me.name)}</span><span class="meta" style="font-size:14px">${esc(S.me.major)} · ${esc(S.me.year)}</span><span class="accent">Transfer goal: ${esc(S.me.goal)}</span></div></div>
+      <div class="stats">
+        <div class="stat"><b>${connCount()}</b><span>Connections</span></div>
+        <div class="stat"><b>${h.answers}</b><span>Answers</span></div>
+        <div class="stat"><b>${S.battles.won}</b><span>Battles won</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row between"><span class="h" style="font-size:16px">Proof of help</span><span class="meta" style="font-size:12px">Verified by classmates</span></div>
+      ${Object.keys(h.by).length?`<div class="wraprow">${Object.entries(h.by).map(([s,n])=>`<span class="pill">Helped in ${esc(s)} ×${n}</span>`).join("")}${h.best?`<span class="pill" style="background:var(--okbg);color:var(--ok)">${h.best} best answer${h.best>1?"s":""}</span>`:""}</div>`:'<span class="meta">Answer a classmate\'s question to earn your first badge.</span>'}
+    </div>
+
+    <div class="card">
+      <div class="row between"><span class="h" style="font-size:16px">Resume</span><span class="meta" style="font-size:12px">Visible to Crew members</span></div>
+      <div class="row" style="border:1px dashed #93B4F5;border-radius:12px;padding:12px">
+        <div class="av" style="width:40px;height:48px;border-radius:8px">${ic("file",20,"#1D4ED8")}</div>
+        <div class="grow col"><span class="name" style="font-size:14px">${esc(S.me.resumeFile||"No file uploaded yet")}</span><span class="meta" style="font-size:12px">${S.me.resumeFile?"Uploaded":"PDF or Word"}</span></div>
+        <label class="btn ghost" style="display:flex;align-items:center;cursor:pointer">Upload<input type="file" accept=".pdf,.doc,.docx" data-in="resume" class="sr"></label>
+      </div>
+      <button class="btn line full" data-a="toggleResume">${ui.resumeOpen?"Hide":"Show"} my living resume</button>
+      ${ui.resumeOpen?`
+      <div class="resume" id="resumeText">
+        <div class="h" style="font-size:18px">${esc(S.me.name)}</div>
+        <div class="meta">${esc(S.me.major)} student · Perimeter College of Georgia State University</div>
+        <h4>Education</h4>
+        <ul><li>Associate degree in progress, ${esc(S.me.major)}, Perimeter College</li><li>Planned transfer: ${esc(S.me.goal)}</li></ul>
+        <h4>Peer tutoring</h4>
+        <ul><li>Answered ${h.answers} classmate question${h.answers===1?"":"s"}${Object.keys(h.by).length?` in ${esc(Object.keys(h.by).join(", "))}`:""}</li>${h.best?`<li>${h.best} answer${h.best>1?"s":""} chosen as best by the student who asked</li>`:""}</ul>
+        ${clubs.length?`<h4>Campus involvement</h4><ul>${clubs.map(c=>`<li>Member, ${esc(c.name)}</li>`).join("")}</ul>`:""}
+        ${evs.length?`<h4>Events</h4><ul>${evs.map(e=>`<li>${esc(e.title)}</li>`).join("")}</ul>`:""}
+        ${S.battles.won?`<h4>Achievements</h4><ul><li>Won ${S.battles.won} of ${S.battles.played} flashcard battles</li></ul>`:""}
+        <h4>Skills</h4><div>${esc(S.me.skills.join(" · "))}</div>
+      </div>
+      <button class="btn full" data-a="copyResume">Copy resume text</button>
+      <span class="meta" style="font-size:12px">Built automatically from what you do on Crew. Join clubs, attend events and help classmates to grow it.</span>`:""}
+    </div>
+
+    <div class="card">
+      <span class="h" style="font-size:16px">Classes this term</span>
+      <div class="wraprow">${S.me.classes.map(c=>`<span class="pill">${esc(c)}</span>`).join("")}</div>
+      <span class="h" style="font-size:16px;margin-top:4px">Skills</span>
+      <div class="wraprow">${S.me.skills.map(c=>`<span class="pill o">${esc(c)}</span>`).join("")}</div>
+    </div>
+    <button class="btn ghost full" data-a="reset">Reset demo data</button>
+  </div>`;
+}
+
+/* ================= BATTLE ================= */
+const DECK=[["d/dx of x³?","3x²",["x²","3x³","x⁴/4"]],["d/dx of sin(x)?","cos(x)",["−cos(x)","−sin(x)","tan(x)"]],["∫ 2x dx?","x² + C",["2x² + C","x + C","2 + C"]],["lim sin(x)/x as x→0?","1",["0","∞","Undefined"]],["d/dx of eˣ?","eˣ",["xeˣ⁻¹","ln(x)","1"]],["Derivative of a constant?","0",["1","The constant","Undefined"]],["d/dx of ln(x)?","1/x",["x","eˣ","ln(x)/x"]]];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+let B=null;
+function startBattle(){
+  B={cards:shuffle(DECK).slice(0,5).map(([q,a,w])=>({q,a,opts:shuffle([a,...w])})),i:0,me:0,rv:0};
+  round();
+}
+function battleHTML(inner){return `<div class="overlay" role="dialog" aria-modal="true" aria-label="Flashcard battle"><div class="sheet">
+  <div class="row between"><span class="kick b">Calculus I · Round ${Math.min(B.i+1,5)}/5</span><button class="vote" data-a="quitBattle">Quit</button></div>
+  <div class="arena"><div class="fighter me"><span class="meta">You</span><b id="bMe">${B.me}</b></div><span class="h" style="color:var(--blue);font-size:22px">VS</span><div class="fighter"><span class="meta">Priya</span><b id="bRv">${B.rv}</b></div></div>
+  ${inner}</div></div>`;}
+function round(){
+  if(B.i>=5) return endBattle();
+  const c=B.cards[B.i];B.my=null;B.rvA=null;B.lock=false;B.t0=Date.now();
+  $("modal").innerHTML=battleHTML(`<div class="timer"><i id="tbar" style="width:100%"></i></div>
+    <div class="h" style="font-size:22px">${esc(c.q)}</div>
+    <div class="col" style="gap:10px">${c.opts.map((o,k)=>`<button class="opt" id="o${k}" data-a="pick" data-id="${k}">${esc(o)}</button>`).join("")}</div>
+    <div class="meta" id="bfeed">Priya is thinking…</div>`);
+  B.tick=setInterval(()=>{const left=Math.max(0,10000-(Date.now()-B.t0));const t=$("tbar");if(t)t.style.width=left/100+"%";if(!left)resolve();},100);
+  const d=2000+Math.random()*5500,right=Math.random()<.7;
+  B.rt=setTimeout(()=>{B.rvA={right,ms:d};const f=$("bfeed");if(f&&!B.lock)f.textContent="Priya locked in an answer!";if(B.my)resolve();},d);
+}
+function pick(k){ if(!B||B.my||B.lock)return; const c=B.cards[B.i];
+  B.my={k,right:c.opts[k]===c.a,ms:Date.now()-B.t0};
+  document.querySelectorAll(".opt").forEach(b=>b.disabled=true);$("o"+k).style.borderColor="var(--blue)";
+  $("bfeed").textContent=B.rvA?"Both locked in…":"Locked in. Waiting for Priya…"; if(B.rvA)resolve();}
+const pts=a=>a&&a.right?10+Math.max(0,Math.round(5-a.ms/2000)):0;
+function resolve(){ if(B.lock)return;B.lock=true;clearInterval(B.tick);clearTimeout(B.rt);
+  B.rvA=B.rvA||{right:false,ms:1e4}; const c=B.cards[B.i],mp=pts(B.my),rp=pts(B.rvA);B.me+=mp;B.rv+=rp;
+  c.opts.forEach((o,k)=>{const el=$("o"+k);if(!el)return;el.disabled=true;if(o===c.a)el.classList.add("right");else if(B.my&&B.my.k===k)el.classList.add("wrong");});
+  $("bMe").textContent=B.me;$("bRv").textContent=B.rv;
+  $("bfeed").innerHTML=`You <b>+${mp}</b> · Priya <b>+${rp}</b>${B.my?"":" · time's up!"}`;
+  B.i++;setTimeout(()=>{ if(B) round(); },1500);}
+function endBattle(){
+  const win=B.me>B.rv,tie=B.me===B.rv;S.battles.played++;if(win)S.battles.won++;S.battleInvite=false;
+  const r=win?50:tie?20:10;S.xp+=r;save();
+  $("modal").innerHTML=battleHTML(`<div class="card" style="text-align:center;align-items:center;padding:26px">
+    <span class="h" style="font-size:34px;color:${win?"var(--blue)":"var(--ink)"}">${win?"You won!":tie?"It's a tie":"Priya wins"}</span>
+    <span class="meta" style="font-size:15px">You ${B.me} · Priya ${B.rv} · +${r} XP</span>
+    <div class="row" style="margin-top:8px"><button class="btn" data-a="battle">Rematch</button><button class="btn ghost" data-a="quitBattle">Done</button></div></div>`);
+}
+function quitBattle(){ if(B){clearInterval(B.tick);clearTimeout(B.rt);} B=null; $("modal").innerHTML=""; render(); }
+
+/* ================= ROUTER / RENDER ================= */
+const VIEWS={home:vHome,people:vPeople,help:vHelp,profs:vProfs,me:vMe};
+const NAV=[["home","Home"],["people","People"],["help","HW Help"],["profs","Profs"],["me","Me"]];
+const cur=()=>{const v=(location.hash||"#home").slice(1);return VIEWS[v]?v:"home";};
+function render(){
+  const v=cur();
+  $("view").innerHTML=VIEWS[v]();
+  $("nav").innerHTML=NAV.map(([k,t])=>`<a href="#${k}" class="${k===v?"on":""}" ${k===v?'aria-current="page"':""}>${ic(k)}${t}</a>`).join("");
+}
+function go(v){ if(cur()===v) render(); else location.hash=v; window.scrollTo(0,0); }
+window.addEventListener("hashchange",()=>{render();window.scrollTo(0,0);});
+
+/* ================= ACTIONS ================= */
+const A={
+  go:el=>go(el.dataset.v),
+  joinFree:()=>{S.joinedFree=true;xp(15,"Heading to the library. Your crew was notified");render();},
+  rsvp:el=>{const e=S.events.find(x=>x.id==el.dataset.id);e.joined=!e.joined;e.going+=e.joined?1:-1;e.major+=e.joined?1:-1;
+    if(e.joined)xp(10,"You're going to "+e.title);else{save();toast("RSVP removed");}render();},
+  joinClub:el=>{const c=S.clubs.find(x=>x.id==el.dataset.id);if(c.joined){toast("You're already in "+c.name);return;}c.joined=true;c.members++;xp(15,"Joined "+c.name);render();},
+  battle:()=>{startBattle();},
+  later:()=>{S.battleInvite=false;save();toast("Challenge saved for later");render();},
+  pick:el=>pick(+el.dataset.id),
+  quitBattle:()=>quitBattle(),
+  answerFeed:el=>{ui.open[el.dataset.id]=true;ui.helpFilter="all";go("help");setTimeout(()=>{const t=$("ans-"+el.dataset.id);if(t){t.scrollIntoView({block:"center"});t.focus();}},50);},
+  poll:el=>{const i=+el.dataset.id;S.poll.mine=i;S.poll.opts[i].v++;xp(2,"Vote counted");render();},
+  connect:el=>{const p=S.people.find(x=>x.id==el.dataset.id);if(p.status!=="none")return;p.status="pending";save();
+    toast(ui.peopleFilter==="ahead"?`Asked ${p.name} for advice`:`Request sent to ${p.name}`);render();
+    setTimeout(()=>{p.status="connected";S.xp+=10;save();toast(`${p.name} accepted!  +10 XP`);render();},2500);},
+  openProf:el=>{ui.profId=+el.dataset.id;ui.reviewOpen=false;go("profs");},
+  closeProf:()=>{ui.profId=null;render();},
+  pf:el=>{ui.peopleFilter=el.dataset.id;render();},
+  hf:el=>{ui.helpFilter=el.dataset.id;render();},
+  toggleAsk:()=>{ui.showAsk=!ui.showAsk;render();},
+  togglePost:el=>{ui.open[el.dataset.id]=!ui.open[el.dataset.id];render();},
+  vote:el=>{const c=S.posts.find(p=>p.id==el.dataset.id).comments.find(c=>c.id==el.dataset.c);c.voted=!c.voted;c.votes+=c.voted?1:-1;save();render();},
+  best:el=>{const p=S.posts.find(p=>p.id==el.dataset.id);p.comments.forEach(c=>c.best=c.id==el.dataset.c);save();toast("Marked as best answer");render();},
+  toggleReview:()=>{ui.reviewOpen=!ui.reviewOpen;ui.reviewStars=0;render();},
+  pickStar:el=>{ui.reviewStars=+el.dataset.id;document.querySelectorAll(".starpick button").forEach((b,i)=>b.classList.toggle("on",i<ui.reviewStars));const e=$("revErr");if(e)e.textContent="";},
+  helpful:el=>{const r=S.profs.find(p=>p.id===ui.profId).reviews[+el.dataset.id];r.voted=!r.voted;r.helpful+=r.voted?1:-1;save();render();},
+  toggleResume:()=>{ui.resumeOpen=!ui.resumeOpen;render();},
+  copyResume:()=>{const t=$("resumeText").innerText;
+    try{navigator.clipboard.writeText(t).then(()=>toast("Resume copied"),()=>toast("Copy blocked. Select the text and copy it instead"));}
+    catch(e){toast("Copy blocked. Select the text and copy it instead");}},
+  reset:()=>{S=JSON.parse(JSON.stringify(SEED));ui.open={1:true};save();toast("Demo data reset");render();}
+};
+document.addEventListener("click",e=>{const el=e.target.closest("[data-a]");if(!el)return;const f=A[el.dataset.a];if(f){e.preventDefault();f(el);}});
+
+document.addEventListener("submit",e=>{
+  const f=e.target,kind=f.dataset.form;if(!kind)return;e.preventDefault();
+  if(kind==="ask"){
+    const title=f.elements.title.value.trim(),body=f.elements.body.value.trim();
+    if(!title){$("askErr").textContent="Add your question first.";f.elements.title.focus();return;}
+    if(!body){$("askErr").textContent="Say what you've tried so far.";f.elements.body.focus();return;}
+    const id=Math.max(0,...S.posts.map(p=>p.id))+1,course=f.elements.course.value;
+    const subj={"CSC 1301":"Programming","MATH 2211":"Calculus","ENGL 1102":"English","PHYS 2211":"Physics","BIOL 1107":"Biology","CHEM 1211":"Chemistry","HIST 2111":"History"}[course]||"General";
+    S.posts.unshift({id,author:"You",course,subject:subj,title,body,time:"just now",comments:[]});
+    ui.showAsk=false;ui.helpFilter="mine";ui.open[id]=true;xp(5,"Question posted");render();
+  }
+  if(kind==="answer"){
+    const pid=+f.dataset.id,text=f.elements.text.value.trim();
+    if(!text){$("ansErr-"+pid).textContent="Write an answer first.";f.elements.text.focus();return;}
+    const p=S.posts.find(x=>x.id===pid);
+    p.comments.push({id:Math.max(0,...p.comments.map(c=>c.id))+1,author:"You",text,votes:0,voted:false,best:false});
+    xp(10,"You helped "+(p.author==="You"?"yourself":p.author.split(" ")[0])+". Proof of help earned");render();
+  }
+  if(kind==="review"){
+    const text=f.elements.text.value.trim();
+    if(!ui.reviewStars){$("revErr").textContent="Pick a star rating first.";return;}
+    if(text.length<10){$("revErr").textContent="Write at least a sentence so it's useful.";f.elements.text.focus();return;}
+    S.profs.find(p=>p.id===ui.profId).reviews.unshift({stars:ui.reviewStars,diff:+f.elements.diff.value,again:f.elements.again.value==="yes",text,term:"Fall 2026",helpful:0,voted:false,mine:true});
+    ui.reviewOpen=false;xp(10,"Review posted");render();
+  }
+});
+document.addEventListener("input",e=>{
+  const el=e.target;
+  if(el.dataset.in==="profQ"){ui.profQ=el.value;const pos=el.selectionStart;render();const n=$("profSearch");n.focus();n.setSelectionRange(pos,pos);}
+  const err=el.closest("form")&&el.closest("form").querySelector(".err");if(err&&el.dataset.in!=="profQ")err.textContent="";
+});
+document.addEventListener("change",e=>{
+  if(e.target.dataset.in==="resume"&&e.target.files[0]){S.me.resumeFile=e.target.files[0].name;xp(20,"Resume uploaded");render();}
+});
+
+render();
+</script>
+</body>
+</html>
