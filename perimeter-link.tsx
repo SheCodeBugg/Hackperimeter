@@ -1746,8 +1746,6 @@ export default function App() {
                 </div>
               </div>
 
-              <StudyHub user={user} selectedCampus={selectedCampus} awardPoints={awardPoints} />
-
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {filteredBuddies.length === 0 ? (
                   <div className="col-span-2 bg-white rounded-2xl border border-slate-200 p-8 text-center">
@@ -1900,6 +1898,8 @@ export default function App() {
                   })
                 )}
               </div>
+
+              <StudyHub user={user} selectedCampus={selectedCampus} awardPoints={awardPoints} />
             </div>
           )}
 
