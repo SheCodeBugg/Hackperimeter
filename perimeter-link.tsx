@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
+import StudyHub from './StudyHub';
 import {
   Home,
   Briefcase,
@@ -547,8 +548,6 @@ export default function App() {
   // New Interest addition state
   const [newInterestInput, setNewInterestInput] = useState('');
   const [isAddingInterest, setIsAddingInterest] = useState(false);
-  const [interestTab, setInterestTab] = useState('Topics');
-  const [showAllInterests, setShowAllInterests] = useState(false);
 
   // Comment & Answer Drafts
   const [commentDrafts, setCommentDrafts] = useState({});
@@ -1747,6 +1746,8 @@ export default function App() {
                 </div>
               </div>
 
+              <StudyHub user={user} selectedCampus={selectedCampus} awardPoints={awardPoints} />
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {filteredBuddies.length === 0 ? (
                   <div className="col-span-2 bg-white rounded-2xl border border-slate-200 p-8 text-center">
@@ -2337,11 +2338,11 @@ export default function App() {
                     <button
                       onClick={() => setIsQrOpen(true)}
                       aria-label="Show my profile QR code"
-                      title="Scan to connect"
+                      title="Care to link?"
                       className="shrink-0 bg-white rounded-xl p-1.5 shadow-md hover:scale-105 transition-transform cursor-pointer flex flex-col items-center"
                     >
                       <QRCodeSVG value={profileUrl} size={52} fgColor="#002875" level="M" />
-                      <span className="text-[8px] font-extrabold uppercase tracking-wide text-[#0039A6] mt-0.5">Scan me</span>
+                      <span className="text-[8px] font-extrabold uppercase tracking-wide text-[#0039A6] mt-0.5 whitespace-nowrap">Care to link?</span>
                     </button>
                   </div>
                 </div>
@@ -2519,14 +2520,12 @@ export default function App() {
                 </div>
               </div>
 
-              {/* LinkedIn-style Interests section */}
-              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-                <div className="px-5 pt-5 flex items-start justify-between gap-3">
+              {/* Interests: simple bubbles */}
+              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
+                <div className="flex items-start justify-between gap-3">
                   <div>
                     <h3 className="text-lg font-extrabold text-slate-900">Interests</h3>
-                    <p className="text-xs text-slate-500 mt-0.5">
-                      {user.interests.length} interests · shown to classmates and alumni mentors
-                    </p>
+                    <p className="text-xs text-slate-500 mt-0.5">Tap a bubble to add or remove it.</p>
                   </div>
                   {!isAddingInterest ? (
                     <button
@@ -2549,84 +2548,50 @@ export default function App() {
                       <button type="submit" className="bg-[#0039A6] text-white text-xs font-bold px-3 h-9 rounded-lg cursor-pointer hover:bg-[#002D85]">
                         Save
                       </button>
-                      <button
-                        type="button"
-                        aria-label="Cancel"
-                        onClick={() => setIsAddingInterest(false)}
-                        className="text-slate-400 hover:text-slate-600 text-xs px-1.5 font-bold"
-                      >
+                      <button type="button" aria-label="Cancel" onClick={() => setIsAddingInterest(false)} className="text-slate-400 hover:text-slate-600 px-1.5">
                         <X className="w-4 h-4" />
                       </button>
                     </form>
                   )}
                 </div>
 
-                {/* Tabs */}
-                <div className="flex gap-1 px-5 mt-3 border-b border-slate-200">
-                  {['Topics', 'Clubs', 'Schools'].map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => { setInterestTab(tab); setShowAllInterests(false); }}
-                      className={`px-3 pb-2.5 pt-1 text-sm font-bold border-b-2 -mb-px transition-colors cursor-pointer ${
-                        interestTab === tab
-                          ? 'border-[#0039A6] text-[#0039A6]'
-                          : 'border-transparent text-slate-500 hover:text-slate-800'
-                      }`}
-                    >
-                      {tab}
-                    </button>
-                  ))}
-                </div>
-
                 {(() => {
-                  const custom = user.interests
-                    .filter((name) => !INTEREST_DIRECTORY.some((d) => d.name === name))
-                    .map((name) => ({ name, type: 'Topics', followers: 1, color: 'bg-[#0039A6]', custom: true }));
-                  const items = [...custom, ...INTEREST_DIRECTORY]
-                    .filter((d) => d.type === interestTab)
-                    .sort((a, b) => Number(user.interests.includes(b.name)) - Number(user.interests.includes(a.name)));
-                  const visible = showAllInterests ? items : items.slice(0, 4);
+                  const all = [...new Set([...user.interests, ...INTEREST_DIRECTORY.map((d) => d.name)])];
+                  const mine = all.filter((n) => user.interests.includes(n));
+                  const suggested = all.filter((n) => !user.interests.includes(n));
                   return (
                     <>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 px-5 py-2">
-                        {visible.map((item) => {
-                          const following = user.interests.includes(item.name);
-                          const initials = item.name.replace(/[^A-Za-z ]/g, '').split(' ').filter(Boolean).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
-                          return (
-                            <div key={item.name} className="flex items-start gap-3 py-3 border-b border-slate-100 last:border-b-0 sm:[&:nth-last-child(2)]:border-b-0">
-                              <div className={`w-12 h-12 ${interestTab === 'Topics' ? 'rounded-full' : 'rounded-lg'} ${item.color} text-white font-extrabold text-sm flex items-center justify-center shrink-0`}>
-                                {interestTab === 'Topics' ? '#' : initials}
-                              </div>
-                              <div className="min-w-0 flex-1">
-                                <div className="font-bold text-sm text-slate-900 truncate">{item.name}</div>
-                                <div className="text-xs text-slate-500">
-                                  {(item.followers + (following && !item.custom ? 1 : 0)).toLocaleString()} {item.followers === 1 && !following ? 'follower' : 'followers'}
-                                  {item.custom && ' · added by you'}
-                                </div>
-                                <button
-                                  onClick={() => handleToggleUserInterest(item.name)}
-                                  aria-pressed={following}
-                                  className={`mt-2 inline-flex items-center gap-1 h-8 px-3.5 rounded-full text-xs font-bold border transition-colors cursor-pointer ${
-                                    following
-                                      ? 'border-slate-400 text-slate-700 hover:bg-slate-100'
-                                      : 'border-[#0039A6] text-[#0039A6] hover:bg-blue-50'
-                                  }`}
-                                >
-                                  {following ? (<><Check className="w-3.5 h-3.5" /> Added</>) : (<><Plus className="w-3.5 h-3.5" /> Add</>)}
-                                </button>
-                              </div>
-                            </div>
-                          );
-                        })}
+                      <div className="flex flex-wrap gap-2 mt-4">
+                        {mine.map((name) => (
+                          <button
+                            key={name}
+                            onClick={() => handleToggleUserInterest(name)}
+                            aria-pressed="true"
+                            title="Tap to remove"
+                            className="px-4 h-9 rounded-full bg-[#0039A6] text-white text-sm font-bold hover:bg-[#002D85] transition-colors cursor-pointer"
+                          >
+                            {name}
+                          </button>
+                        ))}
+                        {mine.length === 0 && <p className="text-xs text-slate-400">No interests yet. Tap one below.</p>}
                       </div>
-                      {items.length > 4 && (
-                        <button
-                          onClick={() => setShowAllInterests((v) => !v)}
-                          className="w-full border-t border-slate-200 py-3 text-sm font-bold text-slate-600 hover:bg-slate-50 flex items-center justify-center gap-1 cursor-pointer"
-                        >
-                          {showAllInterests ? 'Show less' : `Show all ${items.length} ${interestTab.toLowerCase()}`}
-                          <ChevronRight className={`w-4 h-4 transition-transform ${showAllInterests ? '-rotate-90' : 'rotate-90'}`} />
-                        </button>
+                      {suggested.length > 0 && (
+                        <>
+                          <p className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mt-5 mb-2">Suggested</p>
+                          <div className="flex flex-wrap gap-2">
+                            {suggested.map((name) => (
+                              <button
+                                key={name}
+                                onClick={() => handleToggleUserInterest(name)}
+                                aria-pressed="false"
+                                title="Tap to add"
+                                className="px-4 h-9 rounded-full border border-slate-300 bg-white text-slate-700 text-sm font-semibold hover:border-[#0039A6] hover:text-[#0039A6] transition-colors cursor-pointer"
+                              >
+                                {name}
+                              </button>
+                            ))}
+                          </div>
+                        </>
                       )}
                     </>
                   );
@@ -3058,7 +3023,7 @@ export default function App() {
             <div className="mt-4 inline-block p-3 rounded-2xl border-2 border-[#0039A6]/20">
               <QRCodeSVG value={profileUrl} size={200} fgColor="#002875" level="M" />
             </div>
-            <p className="text-sm font-bold text-[#0039A6] mt-3">Scan to connect on Perimeter Link</p>
+            <p className="text-sm font-bold text-[#0039A6] mt-3">Care to link? Scan to connect on Perimeter Link</p>
             <p className="text-[11px] text-slate-400 mt-1 break-all">{profileUrl}</p>
           </div>
         </div>
