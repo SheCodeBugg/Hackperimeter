@@ -1,9 +1,9 @@
 # Perimeter Link · HackPerimeter 2026
 
 A student hub for GSU Perimeter College: campus feed, Study Buddies, opportunities,
-Ask Panther Q&A, and a points leaderboard.
+Ask Perimeter Q&A, and a points leaderboard.
 
-**Live site:** https://shecodebugg.github.io/Hackperimeter/?v=9
+**Live site:** https://shecodebugg.github.io/Hackperimeter/?v=10
 
 ## Where things live
 - `perimeter-link.tsx`: **the app** (edit this one). Built from `perimeter_link_gsu_perimeter_college_student_hub (3).tsx` with the Ting version's Opportunities tab.
