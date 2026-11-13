@@ -532,6 +532,7 @@ export default function App() {
   const [opportunitySort, setOpportunitySort] = useState('Recommended');
   const [oppMajorFilter, setOppMajorFilter] = useState('All');
   const [askTagFilter, setAskTagFilter] = useState('All');
+  const [askQuery, setAskQuery] = useState('');
   const [buddyRoleFilter, setBuddyRoleFilter] = useState('all'); // 'all' | 'students' | 'alumni'
   const [selectedMajorFilter, setSelectedMajorFilter] = useState('All Majors');
   const [selectedInterestFilter, setSelectedInterestFilter] = useState('All Interests');
@@ -684,9 +685,22 @@ export default function App() {
         q.body.toLowerCase().includes(searchQuery.toLowerCase()) ||
         q.tag.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (q.courseCode && q.courseCode.toLowerCase().includes(searchQuery.toLowerCase()));
-      return matchesCampus && matchesTag && matchesQuery;
+      // Ask Perimeter's own search: matches every word against the question, course, tag, author and answers
+      const words = askQuery.trim().toLowerCase().split(/\s+/).filter(Boolean);
+      const haystack = [
+        q.title,
+        q.body,
+        q.tag,
+        q.courseCode || '',
+        (q.author && q.author.name) || '',
+        ...(q.answers || []).map((a) => a.text)
+      ]
+        .join(' ')
+        .toLowerCase();
+      const matchesAskSearch = words.every((w) => haystack.includes(w));
+      return matchesCampus && matchesTag && matchesQuery && matchesAskSearch;
     });
-  }, [questions, selectedCampus, askTagFilter, searchQuery]);
+  }, [questions, selectedCampus, askTagFilter, searchQuery, askQuery]);
 
   // ============================================================================
   // INTERACTION HANDLERS
@@ -2055,8 +2069,30 @@ export default function App() {
                   </button>
                 </div>
 
+                {/* Search problems */}
+                <label className="mt-4 flex items-center gap-2 h-11 px-3.5 rounded-xl bg-slate-50 border border-slate-200 focus-within:border-[#0039A6] focus-within:bg-white transition-colors">
+                  <Search className="w-4 h-4 text-slate-400 shrink-0" />
+                  <input
+                    type="search"
+                    value={askQuery}
+                    onChange={(e) => setAskQuery(e.target.value)}
+                    placeholder="Search problems: course code, topic or keyword (e.g. MATH 2211, derivatives)"
+                    aria-label="Search Ask Perimeter questions"
+                    className="flex-1 bg-transparent outline-none text-sm text-slate-800 placeholder:text-slate-400"
+                  />
+                  {askQuery && (
+                    <button
+                      onClick={() => setAskQuery('')}
+                      aria-label="Clear search"
+                      className="p-1 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200 cursor-pointer"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </label>
+
                 {/* Topic Filter Pills */}
-                <div className="flex flex-wrap gap-1.5 mt-4 pt-3 border-t border-slate-100">
+                <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-slate-100">
                   {['All', '#TransferTips', '#Registration', '#STEM', '#CampusLife'].map((tag) => (
                     <button
                       key={tag}
@@ -2072,6 +2108,30 @@ export default function App() {
                   ))}
                 </div>
               </div>
+
+              {askQuery.trim() && (
+                <p className="px-1 text-xs text-slate-500">
+                  <strong className="text-slate-800">{filteredQuestions.length}</strong> question{filteredQuestions.length === 1 ? '' : 's'} matching “{askQuery.trim()}”
+                </p>
+              )}
+              {filteredQuestions.length === 0 && (
+                <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center">
+                  <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-[#0039A6]">
+                    <Search className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-extrabold text-slate-900">No questions match yet</h3>
+                  <p className="mt-1 text-xs text-slate-500">Try another keyword or topic, or be the first to ask.</p>
+                  <button
+                    onClick={() => {
+                      setCreateType('ask');
+                      setIsCreateModalOpen(true);
+                    }}
+                    className="mt-4 bg-[#0039A6] hover:bg-[#002D85] text-white text-xs font-bold px-4 h-10 rounded-xl cursor-pointer"
+                  >
+                    + Ask this question
+                  </button>
+                </div>
+              )}
 
               {/* Question Threads */}
               {filteredQuestions.map((q) => (
