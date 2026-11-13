@@ -2643,33 +2643,6 @@ export default function App() {
               })}
             </div>
           </div>
-
-          {/* Live Panther Express & Campus Pulse */}
-          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4">
-            <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2.5 flex items-center gap-1.5">
-              <Bus className="w-4 h-4 text-emerald-600" /> Live Campus Pulse
-            </h3>
-            <div className="space-y-2 text-xs">
-              <div className="flex items-center justify-between py-1.5 border-b border-slate-100">
-                <span className="font-semibold text-slate-700">Clarkston ↔ Decatur Shuttle</span>
-                <span className="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">
-                  On Time • Every 30m
-                </span>
-              </div>
-              <div className="flex items-center justify-between py-1.5 border-b border-slate-100">
-                <span className="font-semibold text-slate-700">Dunwoody LRC Study Pods</span>
-                <span className="text-[10px] font-bold bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full">
-                  4 Pods Open
-                </span>
-              </div>
-              <div className="flex items-center justify-between pt-1">
-                <span className="font-semibold text-slate-700">Spring 2027 Registration</span>
-                <span className="text-[10px] font-bold bg-blue-50 text-[#0039A6] px-2 py-0.5 rounded-full">
-                  Open in PAWS
-                </span>
-              </div>
-            </div>
-          </div>
         </aside>
       </div>
 
