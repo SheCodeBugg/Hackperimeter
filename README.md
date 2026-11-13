@@ -3,7 +3,7 @@
 A student hub for GSU Perimeter College: campus feed, Study Buddies, opportunities,
 Ask Panther Q&A, and a points leaderboard.
 
-**Live site:** https://shecodebugg.github.io/Hackperimeter/
+**Live site:** https://shecodebugg.github.io/Hackperimeter/?v=2
 
 ## Where things live
 - `perimeter-link.tsx`: **the app** (edit this one). It's the Study Buddy version with the Ting version's Opportunities tab.
