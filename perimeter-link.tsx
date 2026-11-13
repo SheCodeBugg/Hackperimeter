@@ -1217,7 +1217,7 @@ export default function App() {
               </span>
             </div>
             <div className="px-5 pb-5">
-              <div className="-mt-8 mb-3 flex items-end justify-between">
+              <div className="relative z-10 -mt-8 mb-3 flex items-end justify-between">
                 <div
                   className={`w-16 h-16 rounded-2xl text-white font-extrabold text-xl flex items-center justify-center border-4 border-white shadow-md ${
                     user.isAlumni ? 'bg-[#1E1B4B]' : 'bg-[#002875]'
@@ -2338,7 +2338,7 @@ export default function App() {
                       >
                         {user.avatar}
                       </div>
-                      <div className="pb-1">
+                      <div className="self-start pt-12 pb-1">
                         <div className="flex items-center gap-2 flex-wrap">
                           <h2 className="text-xl font-extrabold text-slate-900">{user.name}</h2>
                           {user.isAlumni && (
