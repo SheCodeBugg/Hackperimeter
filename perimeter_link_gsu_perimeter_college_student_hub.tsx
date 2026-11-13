@@ -34,6 +34,7 @@ import {
   ChevronRight,
   Clock
 } from 'lucide-react';
+import StudyGroups from './StudyGroups';
 
 // ============================================================================
 // INITIAL SEED DATA (Realistic GSU Perimeter College Student Content)
@@ -362,7 +363,7 @@ function getTierInfo(points) {
 
 export default function App() {
   // Navigation & Filters
-  const [activeTab, setActiveTab] = useState('feed'); // 'feed' | 'opportunities' | 'ask' | 'hub'
+  const [activeTab, setActiveTab] = useState('feed'); // 'feed' | 'opportunities' | 'ask' | 'groups' | 'hub'
   const [selectedCampus, setSelectedCampus] = useState('All Campuses');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -880,6 +881,7 @@ export default function App() {
               { id: 'feed', label: 'Campus Feed', icon: Home, desc: 'Photos & Student Life' },
               { id: 'opportunities', label: 'Opportunities', icon: Briefcase, desc: 'Internships, REUs & Jobs' },
               { id: 'ask', label: 'Ask Panther', icon: HelpCircle, desc: 'Classes & Transfer Q&A' },
+              { id: 'groups', label: 'Study Groups', icon: Users, desc: 'Find classmates to study with' },
               { id: 'hub', label: 'Panther Hub', icon: Trophy, desc: 'Leaderboard & Badges' }
             ].map((item) => {
               const Icon = item.icon;
@@ -932,11 +934,12 @@ export default function App() {
         {/* CENTER MAIN STREAM */}
         <main className="lg:col-span-6 space-y-5">
           {/* Tablet / Top Tab Switcher (Visible on < lg screens) */}
-          <div className="lg:hidden bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm grid grid-cols-4 gap-1">
+          <div className="lg:hidden bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm grid grid-cols-5 gap-1">
             {[
               { id: 'feed', label: 'Feed', icon: Home },
               { id: 'opportunities', label: 'Opps', icon: Briefcase },
               { id: 'ask', label: 'Ask', icon: HelpCircle },
+              { id: 'groups', label: 'Groups', icon: Users },
               { id: 'hub', label: 'Hub', icon: Trophy }
             ].map((tab) => {
               const Icon = tab.icon;
@@ -1525,6 +1528,13 @@ export default function App() {
           )}
 
           {/* ================================================================
+              TAB: STUDY GROUPS (see StudyGroups.tsx)
+             ================================================================ */}
+          {activeTab === 'groups' && (
+            <StudyGroups user={user} selectedCampus={selectedCampus} awardPoints={awardPoints} />
+          )}
+
+          {/* ================================================================
               TAB 4: PANTHER HUB (Leaderboard, Profile & Badges)
              ================================================================ */}
           {activeTab === 'hub' && (
@@ -1764,6 +1774,7 @@ export default function App() {
           { id: 'feed', label: 'Feed', icon: Home },
           { id: 'opportunities', label: 'Opps', icon: Briefcase },
           { id: 'ask', label: 'Ask', icon: HelpCircle },
+          { id: 'groups', label: 'Groups', icon: Users },
           { id: 'hub', label: 'Hub', icon: Trophy }
         ].map((item) => {
           const Icon = item.icon;
