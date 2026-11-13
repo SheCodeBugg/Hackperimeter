@@ -442,13 +442,6 @@ const INITIAL_OPPORTUNITIES = [
   }
 ];
 
-const REWARDS_CATALOG = [
-  { id: 'r1', title: 'Panther Dining $10 Coffee & Lunch Voucher', cost: 250, campus: 'All Campuses', icon: '☕', stock: 'Available' },
-  { id: 'r2', title: 'GSU Perimeter Embroidered Hoodie', cost: 600, campus: 'Campus Bookstore', icon: '👕', stock: 'Limited' },
-  { id: 'r3', title: 'Priority Career Center 1-on-1 Mock Interview', cost: 150, campus: 'Virtual / In-Person', icon: '💼', stock: 'Available' },
-  { id: 'r4', title: 'Graduation Honor Cord (Campus Leader)', cost: 1000, campus: 'Commencement', icon: '🎓', stock: 'Prestige' }
-];
-
 // ============================================================================
 // HELPER FUNCTIONS
 // ============================================================================
@@ -995,22 +988,6 @@ export default function App() {
     setIsCreateModalOpen(false);
   };
 
-  const handleRedeemReward = (reward) => {
-    if (user.points < reward.cost) return;
-    setUser((prev) => ({
-      ...prev,
-      points: prev.points - reward.cost
-    }));
-    const id = Date.now();
-    setToasts((prev) => [
-      ...prev,
-      { id, amount: -reward.cost, reason: `Redeemed: ${reward.title}` }
-    ]);
-    setTimeout(() => {
-      setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 3800);
-  };
-
   const handleToggleUserInterest = (interestName) => {
     setUser((prev) => {
       const exists = prev.interests.includes(interestName);
@@ -1145,7 +1122,7 @@ export default function App() {
             <button
               onClick={() => setIsPointsModalOpen(true)}
               className="flex items-center gap-2 bg-gradient-to-r from-[#0039A6] to-[#0055D4] hover:from-[#002D85] hover:to-[#0039A6] text-white px-3 py-1.5 sm:py-2 rounded-full shadow-sm transition-all cursor-pointer group"
-              title="View Panther Points & Rewards"
+              title="View Panther Points"
             >
               <span className="text-sm group-hover:rotate-12 transition-transform">🐾</span>
               <div className="text-left leading-tight">
@@ -1305,12 +1282,6 @@ export default function App() {
                     style={{ width: `${progressPercent}%` }}
                   />
                 </div>
-                <button
-                  onClick={() => setIsPointsModalOpen(true)}
-                  className="mt-2.5 w-full text-center text-xs font-bold text-[#0039A6] hover:text-[#0077CC] flex items-center justify-center gap-1 cursor-pointer"
-                >
-                  <Gift className="w-3.5 h-3.5" /> Redeem Campus Perks
-                </button>
               </div>
             </div>
           </div>
@@ -2567,7 +2538,7 @@ export default function App() {
           <div className="bg-gradient-to-br from-[#002875] via-[#0039A6] to-[#0055D4] rounded-2xl p-5 text-white shadow-sm">
             <div className="flex items-center justify-between">
               <span className="text-xs font-extrabold uppercase tracking-wider text-amber-300 flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5" /> Panther Rewards
+                <Sparkles className="w-3.5 h-3.5" /> Panther Points
               </span>
               <span className="text-xs bg-white/15 px-2.5 py-0.5 rounded-full font-bold">
                 Fall 2026
@@ -2579,8 +2550,8 @@ export default function App() {
             </p>
             <ul className="mt-3.5 space-y-2 text-xs">
               <li className="flex items-center justify-between bg-white/10 px-3 py-2 rounded-xl">
-                <span>Apply to an Opportunity</span>
-                <span className="font-extrabold text-amber-300">+35–50 pts</span>
+                <span>RSVP to a Campus Event</span>
+                <span className="font-extrabold text-amber-300">+15–25 pts</span>
               </li>
               <li className="flex items-center justify-between bg-white/10 px-3 py-2 rounded-xl">
                 <span>Answer on Ask Panther</span>
@@ -2591,12 +2562,6 @@ export default function App() {
                 <span className="font-extrabold text-amber-300">+15 pts</span>
               </li>
             </ul>
-            <button
-              onClick={() => setIsPointsModalOpen(true)}
-              className="mt-4 w-full bg-amber-400 hover:bg-amber-300 text-[#002875] font-extrabold text-xs py-2.5 rounded-xl shadow-sm transition-colors cursor-pointer"
-            >
-              Open Rewards Store
-            </button>
           </div>
 
           {/* Upcoming Campus Events with 1-Click RSVP */}
@@ -2878,7 +2843,7 @@ export default function App() {
       )}
 
       {/* ====================================================================
-          MODAL 2: PANTHER POINTS & CAMPUS PERKS REWARDS DRAWER/MODAL
+          MODAL 2: PANTHER POINTS WALLET
          ==================================================================== */}
       {isPointsModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
@@ -2911,48 +2876,6 @@ export default function App() {
               </div>
             </div>
 
-            <div className="p-6 space-y-4 max-h-[65vh] overflow-y-auto">
-              <div>
-                <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-2.5">
-                  Redeem Campus Perks
-                </h4>
-                <div className="space-y-2.5">
-                  {REWARDS_CATALOG.map((reward) => {
-                    const canAfford = user.points >= reward.cost;
-                    return (
-                      <div
-                        key={reward.id}
-                        className="flex items-center justify-between gap-3 p-3 rounded-2xl border border-slate-200 bg-slate-50/70"
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="text-2xl">{reward.icon}</span>
-                          <div>
-                            <p className="font-bold text-xs sm:text-sm text-slate-900">
-                              {reward.title}
-                            </p>
-                            <p className="text-[11px] text-slate-500">
-                              {reward.campus} • {reward.stock}
-                            </p>
-                          </div>
-                        </div>
-
-                        <button
-                          onClick={() => handleRedeemReward(reward)}
-                          disabled={!canAfford}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-extrabold shrink-0 transition-all cursor-pointer ${
-                            canAfford
-                              ? 'bg-[#0039A6] hover:bg-[#002D85] text-white shadow-xs'
-                              : 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                          }`}
-                        >
-                          {reward.cost} pts
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       )}
