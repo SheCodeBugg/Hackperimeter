@@ -78,7 +78,7 @@ const INITIAL_USER = {
   streak: 6,
   badges: [
     { id: 'b1', name: 'Campus Connector', icon: '🔗', desc: 'Made 10+ connections across Perimeter campuses' },
-    { id: 'b2', name: 'Panther Helper', icon: '🐾', desc: 'Answered 5+ questions on Ask Panther' },
+    { id: 'b2', name: 'Panther Helper', icon: '🐾', desc: 'Answered 5+ questions on Ask Perimeter' },
     { id: 'b3', name: 'STEM Pioneer', icon: '🔬', desc: 'Active member in Perimeter STEM & MESA' }
   ],
   savedOpps: ['opp-2'],
@@ -672,7 +672,7 @@ export default function App() {
     return filtered;
   }, [opportunities, selectedCampus, oppCategory, oppView, user.savedOpps, searchQuery, opportunitySort]);
 
-  // Filtered Questions (Ask Panther)
+  // Filtered Questions (Ask Perimeter)
   const filteredQuestions = useMemo(() => {
     return questions.filter((q) => {
       const matchesCampus =
@@ -856,7 +856,7 @@ export default function App() {
         const newVote = prevVote === direction ? 0 : direction;
         const diff = newVote - prevVote;
         if (newVote === 1 && prevVote !== 1) {
-          awardPoints(5, 'Upvoted an Ask Panther thread');
+          awardPoints(5, 'Upvoted an Ask Perimeter thread');
         }
         return {
           ...q,
@@ -901,7 +901,7 @@ export default function App() {
       user.isAlumni ? 25 : 15,
       user.isAlumni
         ? 'Alumni Mentor answered a student question!'
-        : 'Answered a peer question on Ask Panther'
+        : 'Answered a peer question on Ask Perimeter'
     );
   };
 
@@ -966,7 +966,7 @@ export default function App() {
       };
       setQuestions([newQuestion, ...questions]);
       setActiveTab('ask');
-      awardPoints(20, 'Asked a question on Ask Panther');
+      awardPoints(20, 'Asked a question on Ask Perimeter');
     } else if (createType === 'opp') {
       const newOpp = {
         id: `opp-${Date.now()}`,
@@ -1090,7 +1090,7 @@ export default function App() {
                 </span>
               </div>
               <p className="hidden sm:block text-[11px] text-slate-500 -mt-0.5">
-                Connect • Discover • Ask Panthers
+                Connect • Discover • Ask Perimeter
               </p>
             </div>
           </div>
@@ -1319,7 +1319,7 @@ export default function App() {
               { id: 'feed', label: 'Campus Feed', icon: Home, desc: 'Photos, Swaps & Alumni Spotlights' },
               { id: 'buddies', label: 'Buddies & Alumni', icon: Users, desc: 'Classmates & Alumni Mentors' },
               { id: 'opportunities', label: 'Opportunities', icon: Briefcase, desc: 'Internships, REUs & Jobs' },
-              { id: 'ask', label: 'Ask Panther', icon: HelpCircle, desc: 'Profs, Classes & Transfer Q&A' },
+              { id: 'ask', label: 'Ask Perimeter', icon: HelpCircle, desc: 'Profs, Classes & Transfer Q&A' },
               { id: 'hub', label: 'Panther Hub', icon: Trophy, desc: 'Profile, Points & Badges' }
             ].map((item) => {
               const Icon = item.icon;
@@ -1446,7 +1446,7 @@ export default function App() {
                     }}
                     className="flex items-center gap-1.5 hover:text-[#0039A6] px-2 py-1 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer"
                   >
-                    <HelpCircle className="w-4 h-4 text-amber-500" /> Ask Panther
+                    <HelpCircle className="w-4 h-4 text-amber-500" /> Ask Perimeter
                   </button>
                   <button
                     onClick={() => setActiveTab('buddies')}
@@ -2026,18 +2026,18 @@ export default function App() {
           )}
 
           {/* ================================================================
-              TAB 3: ASK PANTHER (Reddit Vibe Q&A Forum)
+              TAB 3: ASK PERIMETER (Reddit Vibe Q&A Forum)
              ================================================================ */}
           {activeTab === 'ask' && (
             <div className="space-y-4">
-              {/* Ask Panther Header Card */}
+              {/* Ask Perimeter Header Card */}
               <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
                 <div className="flex items-center justify-between gap-3 flex-wrap">
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="text-xl">🐾</span>
                       <h2 className="text-lg sm:text-xl font-extrabold text-[#0039A6]">
-                        Ask Panther Q&A
+                        Ask Perimeter Q&A
                       </h2>
                     </div>
                     <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
@@ -2581,7 +2581,7 @@ export default function App() {
                 <span className="font-extrabold text-amber-300">+15–25 pts</span>
               </li>
               <li className="flex items-center justify-between bg-white/10 px-3 py-2 rounded-xl">
-                <span>Answer on Ask Panther</span>
+                <span>Answer on Ask Perimeter</span>
                 <span className="font-extrabold text-amber-300">+15 pts</span>
               </li>
               <li className="flex items-center justify-between bg-white/10 px-3 py-2 rounded-xl">
@@ -2671,7 +2671,7 @@ export default function App() {
       </nav>
 
       {/* ====================================================================
-          MODAL 1: CREATE POST / OPPORTUNITY / ASK PANTHER QUESTION
+          MODAL 1: CREATE POST / OPPORTUNITY / ASK PERIMETER QUESTION
          ==================================================================== */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
@@ -2694,7 +2694,7 @@ export default function App() {
               <div className="grid grid-cols-3 gap-2 bg-slate-100 p-1 rounded-xl">
                 {[
                   { id: 'feed', label: 'Campus Post (+25p)' },
-                  { id: 'ask', label: 'Ask Panther (+20p)' },
+                  { id: 'ask', label: 'Ask Perimeter (+20p)' },
                   { id: 'opp', label: 'Opportunity (+30p)' }
                 ].map((t) => (
                   <button
