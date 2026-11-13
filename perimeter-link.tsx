@@ -84,7 +84,9 @@ const INITIAL_USER = {
   savedOpps: ['opp-2'],
   appliedOpps: ['opp-1'],
   connectedPeers: ['ml-1'],
-  rsvpedEvents: ['ev-1']
+  rsvpedEvents: ['ev-1'],
+  // Activity from before this session, counted toward the Engagement Rank
+  activityHistory: { eventsAttended: 7, answersGiven: 5, postsAndComments: 14, connections: 10 }
 };
 
 const INITIAL_STUDY_BUDDIES = [
@@ -451,6 +453,25 @@ const REWARDS_CATALOG = [
 // HELPER FUNCTIONS
 // ============================================================================
 
+// ENGAGEMENT RANK (1–5 stars)
+// Each kind of engagement gets its own level from 1 to 5. `min` is the count
+// needed to reach levels 1–5 (e.g. events: 0–5 = level 1, 6–10 = level 2 ...).
+// The overall rank is the weighted average of those levels, rounded, capped at 5.
+const RANK_CATEGORIES = [
+  { key: 'events', label: 'Events attended', unit: 'events', min: [0, 6, 11, 21, 36], weight: 1.25 },
+  { key: 'answers', label: 'Questions answered', unit: 'answers', min: [0, 3, 8, 16, 31], weight: 1.25 },
+  { key: 'community', label: 'Posts & comments', unit: 'posts & comments', min: [0, 6, 16, 31, 61], weight: 1 },
+  { key: 'connections', label: 'Connections', unit: 'connections', min: [0, 5, 15, 30, 50], weight: 1 },
+  { key: 'career', label: 'Opportunities pursued', unit: 'applications', min: [0, 1, 3, 6, 10], weight: 0.75 },
+  { key: 'streak', label: 'Activity streak', unit: 'days in a row', min: [0, 3, 7, 14, 30], weight: 0.75 }
+];
+
+const RANK_TITLES = ['Newcomer', 'Explorer', 'Contributor', 'Campus Leader', 'Panther Legend'];
+
+function getLevel(value, min) {
+  return min.filter((m) => value >= m).length; // 1–5
+}
+
 // LinkedIn-style Interests directory for the Panther Hub profile
 const INTEREST_DIRECTORY = [
   { name: 'Engineering', type: 'Topics', followers: 1840, color: 'bg-blue-600' },
@@ -604,6 +625,39 @@ export default function App() {
       return matchesCampus && matchesRole && matchesMajor && matchesInterest && matchesCourse && matchesGlobalSearch;
     });
   }, [studyBuddies, selectedCampus, buddyRoleFilter, selectedMajorFilter, selectedInterestFilter, courseFilter, searchQuery]);
+
+  // Engagement Rank: counts real activity in the app plus earlier history
+  const engagement = useMemo(() => {
+    const history = user.activityHistory || {};
+    const mine = (name) => name === user.name;
+    const answers = questions.reduce((n, q) => n + (q.answers || []).filter((a) => mine(a.author)).length, 0);
+    const myPosts = posts.filter((p) => p.author && mine(p.author.name)).length;
+    const myComments = posts.reduce((n, p) => n + (p.comments || []).filter((c) => mine(c.author)).length, 0);
+    const counts = {
+      events: (history.eventsAttended || 0) + user.rsvpedEvents.length,
+      answers: (history.answersGiven || 0) + answers,
+      community: (history.postsAndComments || 0) + myPosts + myComments,
+      connections: (history.connections || 0) + user.connectedPeers.length,
+      career: user.appliedOpps.length,
+      streak: user.streak || 0
+    };
+    const categories = RANK_CATEGORIES.map((c) => {
+      const value = counts[c.key];
+      const level = getLevel(value, c.min);
+      const toNext = level < 5 ? c.min[level] - value : 0;
+      return { ...c, value, level, toNext };
+    });
+    const totalWeight = categories.reduce((n, c) => n + c.weight, 0);
+    const score = categories.reduce((n, c) => n + c.level * c.weight, 0) / totalWeight; // 1.0–5.0
+    const rank = Math.min(5, Math.max(1, Math.round(score)));
+    const nextAt = rank < 5 ? rank + 0.5 : 5;
+    const prevAt = rank > 1 ? rank - 0.5 : 1;
+    const progress = rank >= 5 ? 100 : Math.max(0, Math.min(100, ((score - prevAt) / (nextAt - prevAt)) * 100));
+    const easiest = categories
+      .filter((c) => c.level < 5)
+      .sort((a, b) => a.toNext / (a.min[a.level] || 1) - b.toNext / (b.min[b.level] || 1))[0];
+    return { categories, score, rank, title: RANK_TITLES[rank - 1], progress, easiest };
+  }, [user, posts, questions]);
 
   // Filtered Opportunities
   const filteredOpportunities = useMemo(() => {
@@ -2236,6 +2290,17 @@ export default function App() {
                           )}
                         </div>
                         <p className="text-xs font-semibold text-[#0077CC]">{user.major}</p>
+                        <div
+                          className="mt-1.5 inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 rounded-full pl-2 pr-2.5 py-0.5"
+                          title={`Engagement rank ${engagement.rank} of 5`}
+                        >
+                          <span className="flex" aria-label={`${engagement.rank} out of 5 stars`}>
+                            {[1, 2, 3, 4, 5].map((n) => (
+                              <Star key={n} className={`w-3.5 h-3.5 ${n <= engagement.rank ? 'fill-amber-400 text-amber-400' : 'text-amber-200'}`} />
+                            ))}
+                          </span>
+                          <span className="text-[11px] font-extrabold text-amber-800">{engagement.title}</span>
+                        </div>
                       </div>
                     </div>
 
@@ -2321,6 +2386,61 @@ export default function App() {
                       ))}
                     </div>
                   </div>
+                </div>
+              </div>
+
+              {/* Engagement Rank breakdown */}
+              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-extrabold uppercase tracking-wider text-slate-400">Engagement rank</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="flex" aria-label={`${engagement.rank} out of 5 stars`}>
+                        {[1, 2, 3, 4, 5].map((n) => (
+                          <Star key={n} className={`w-6 h-6 ${n <= engagement.rank ? 'fill-amber-400 text-amber-400' : 'text-slate-200'}`} />
+                        ))}
+                      </span>
+                      <span className="text-lg font-extrabold text-slate-900">{engagement.title}</span>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-1">
+                      Rank {engagement.rank} of 5 · score {engagement.score.toFixed(1)} from events, helping, posting, connecting, career moves and streaks.
+                    </p>
+                  </div>
+                  {engagement.rank < 5 && (
+                    <div className="min-w-[180px] flex-1 max-w-xs">
+                      <div className="flex justify-between text-[11px] font-bold text-slate-600 mb-1">
+                        <span>{engagement.title}</span>
+                        <span>{RANK_TITLES[engagement.rank]}</span>
+                      </div>
+                      <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
+                        <div className="h-full rounded-full bg-amber-400 transition-all" style={{ width: `${engagement.progress}%` }} />
+                      </div>
+                      {engagement.easiest && (
+                        <p className="text-[11px] text-slate-500 mt-1.5">
+                          Quickest boost: {engagement.easiest.toNext} more {engagement.easiest.unit}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-4">
+                  {engagement.categories.map((c) => (
+                    <div key={c.key} className="bg-slate-50 border border-slate-200/80 rounded-xl p-3">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-xs font-bold text-slate-800">{c.label}</span>
+                        <span className="text-xs font-extrabold text-[#0039A6]">{c.value}</span>
+                      </div>
+                      <div className="flex gap-1 mt-2" aria-label={`Level ${c.level} of 5`}>
+                        {[1, 2, 3, 4, 5].map((n) => (
+                          <div key={n} className={`h-1.5 flex-1 rounded-full ${n <= c.level ? 'bg-[#0039A6]' : 'bg-slate-200'}`} />
+                        ))}
+                      </div>
+                      <p className="text-[11px] text-slate-500 mt-1.5">
+                        {c.level < 5 ? `Level ${c.level} · ${c.toNext} more to level ${c.level + 1}` : 'Level 5 · maxed out'}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
 
