@@ -3,7 +3,7 @@
 A student hub for GSU Perimeter College: campus feed, Study Buddies, opportunities,
 Ask Perimeter Q&A, and a points leaderboard.
 
-**Live site:** https://shecodebugg.github.io/Hackperimeter/?v=13
+**Live site:** https://shecodebugg.github.io/Hackperimeter/?v=14
 **Mobile preview (phone frame):** https://shecodebugg.github.io/Hackperimeter/phone/
 
 ## Where things live
