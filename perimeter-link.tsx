@@ -440,14 +440,6 @@ const INITIAL_OPPORTUNITIES = [
   }
 ];
 
-const LEADERBOARD_DATA = [
-  { rank: 1, name: 'Tariq Al-Mansoor', campus: 'Alpharetta', major: 'CS Alum • Cox Auto', points: 890, badge: 'Perimeter Alumni', isAlumni: true, avatar: 'TA' },
-  { rank: 2, name: 'Maya Lin', campus: 'Clarkston', major: 'Engineering', points: 765, badge: 'MESA Scholar', avatar: 'ML' },
-  { rank: 3, name: 'Marcus Sterling', campus: 'Decatur', major: 'Business Admin', points: 640, badge: 'SGA Senator', avatar: 'MS' },
-  { rank: 4, name: 'Chloe Bennett', campus: 'Newton', major: 'Biology / Pre-Med', points: 530, badge: 'Honors College', avatar: 'CB' },
-  { rank: 5, name: 'Jordan Vance (You)', campus: 'Dunwoody', major: 'Computer Science', points: 420, badge: 'Campus Connector', avatar: 'JV', isCurrentUser: true }
-];
-
 const REWARDS_CATALOG = [
   { id: 'r1', title: 'Panther Dining $10 Coffee & Lunch Voucher', cost: 250, campus: 'All Campuses', icon: '☕', stock: 'Available' },
   { id: 'r2', title: 'GSU Perimeter Embroidered Hoodie', cost: 600, campus: 'Campus Bookstore', icon: '👕', stock: 'Limited' },
@@ -540,24 +532,6 @@ export default function App() {
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, 3600);
   };
-
-  // Dynamic Leaderboard including current user's live points
-  const liveLeaderboard = useMemo(() => {
-    const updated = LEADERBOARD_DATA.map((entry) =>
-      entry.isCurrentUser
-        ? {
-            ...entry,
-            points: user.points,
-            isAlumni: user.isAlumni,
-            badge: user.isAlumni ? 'Perimeter Alumni' : entry.badge,
-            major: user.isAlumni ? user.alumniDetails.currentRole : 'Computer Science'
-          }
-        : entry
-    );
-    return updated
-      .sort((a, b) => b.points - a.points)
-      .map((item, idx) => ({ ...item, rank: idx + 1 }));
-  }, [user.points, user.isAlumni, user.alumniDetails.currentRole]);
 
   const tier = getTierInfo(user.points);
   const progressPercent = Math.min(100, Math.round((user.points / tier.next) * 100));
@@ -1271,7 +1245,7 @@ export default function App() {
               { id: 'buddies', label: 'Buddies & Alumni', icon: Users, desc: 'Classmates & Alumni Mentors' },
               { id: 'opportunities', label: 'Opportunities', icon: Briefcase, desc: 'Internships, REUs & Jobs' },
               { id: 'ask', label: 'Ask Panther', icon: HelpCircle, desc: 'Profs, Classes & Transfer Q&A' },
-              { id: 'hub', label: 'Panther Hub', icon: Trophy, desc: 'Leaderboard & Badges' }
+              { id: 'hub', label: 'Panther Hub', icon: Trophy, desc: 'Profile, Points & Badges' }
             ].map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -2195,7 +2169,7 @@ export default function App() {
           )}
 
           {/* ================================================================
-              TAB 4: PANTHER HUB (Leaderboard, Profile & Badges)
+              TAB 4: PANTHER HUB (Profile & Badges)
              ================================================================ */}
           {activeTab === 'hub' && (
             <div className="space-y-5">
@@ -2424,79 +2398,11 @@ export default function App() {
                   </div>
                 </div>
               </div>
-
-              {/* Cross-Campus Leaderboard */}
-              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h3 className="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
-                      <Trophy className="w-5 h-5 text-amber-500" /> Perimeter Campus Leaderboard
-                    </h3>
-                    <p className="text-xs text-slate-500">
-                      Top student contributors across Clarkston, Decatur, Dunwoody, Newton & Alpharetta
-                    </p>
-                  </div>
-                </div>
-
-                <div className="space-y-2.5">
-                  {liveLeaderboard.map((student) => (
-                    <div
-                      key={student.name}
-                      className={`flex items-center justify-between p-3 rounded-xl border transition-all ${
-                        student.isCurrentUser
-                          ? 'bg-blue-50/80 border-[#0039A6]/40 shadow-sm'
-                          : 'bg-slate-50/60 border-slate-200/70'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`w-7 h-7 rounded-lg font-extrabold text-xs flex items-center justify-center ${
-                            student.rank === 1
-                              ? 'bg-amber-400 text-[#002875]'
-                              : student.rank === 2
-                              ? 'bg-slate-300 text-slate-800'
-                              : student.rank === 3
-                              ? 'bg-amber-700/20 text-amber-900'
-                              : 'bg-slate-200 text-slate-600'
-                          }`}
-                        >
-                          #{student.rank}
-                        </div>
-                        <div className="w-9 h-9 rounded-full bg-[#0039A6] text-white font-bold text-xs flex items-center justify-center">
-                          {student.avatar}
-                        </div>
-                        <div>
-                          <div className="font-bold text-sm text-slate-900 flex items-center gap-1.5 flex-wrap">
-                            <span>{student.name}</span>
-                            {student.isAlumni && (
-                              <span className="inline-flex items-center gap-1 text-[10px] font-extrabold bg-indigo-950 text-amber-300 px-2 py-0.5 rounded-full">
-                                <GraduationCap className="w-2.5 h-2.5" /> Perimeter Alumni
-                              </span>
-                            )}
-                            <span className="text-[10px] font-bold bg-white border border-slate-200 text-[#0039A6] px-2 py-0.5 rounded-full">
-                              {student.campus}
-                            </span>
-                          </div>
-                          <div className="text-[11px] text-slate-500">
-                            {student.major} • {student.badge}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="text-right">
-                        <span className="font-extrabold text-sm text-[#0039A6]">
-                          {student.points} pts
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           )}
         </main>
 
-        {/* RIGHT SIDEBAR: Trending on Perimeter, Quick Leaderboard & Points Guide */}
+        {/* RIGHT SIDEBAR: Trending on Perimeter & Points Guide */}
         <aside className="hidden lg:block lg:col-span-3 space-y-5">
           {/* Earn Panther Points Widget */}
           <div className="bg-gradient-to-br from-[#002875] via-[#0039A6] to-[#0055D4] rounded-2xl p-5 text-white shadow-sm">
